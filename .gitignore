@@ -12,10 +12,15 @@
 # Compiled Static libraries
 *.lai
 *.la
-*.a
-*.lib
 
 # Executables
 *.exe
 *.out
 *.app
+
+# Project files
+*xcuserdata*
+*.perspectivev3
+*.pbxuser
+*.DS_Store
+*.user
