@@ -458,7 +458,6 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/LibOVR/Lib/MacOS/Debug\"",
 					"\"$(SRCROOT)/LibOVR/Lib/MacOS/Release\"",
 				);
 				OTHER_LDFLAGS = "$(C74_SYM_LINKER_FLAGS)";
@@ -486,7 +485,6 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/LibOVR/Lib/MacOS/Debug\"",
 					"\"$(SRCROOT)/LibOVR/Lib/MacOS/Release\"",
 				);
 				OTHER_LDFLAGS = "$(C74_SYM_LINKER_FLAGS)";
