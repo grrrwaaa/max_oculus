@@ -7,16 +7,16 @@ Content     :   Contains atomic operations and inline fastest locking
 Created     :   September 19, 2012
 Notes       : 
 
-Copyright   :   Copyright 2014 Oculus VR, Inc. All Rights reserved.
+Copyright   :   Copyright 2014 Oculus VR, LLC All Rights reserved.
 
-Licensed under the Oculus VR Rift SDK License Version 3.1 (the "License"); 
+Licensed under the Oculus VR Rift SDK License Version 3.2 (the "License"); 
 you may not use the Oculus VR Rift SDK except in compliance with the License, 
 which is provided at the time of installation or download, or which 
 otherwise accompanies this software in either electronic or hard copy form.
 
 You may obtain a copy of the License at
 
-http://www.oculusvr.com/licenses/LICENSE-3.1 
+http://www.oculusvr.com/licenses/LICENSE-3.2 
 
 Unless required by applicable law or agreed to in writing, the Oculus VR SDK 
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -32,7 +32,7 @@ limitations under the License.
 #ifdef OVR_ENABLE_THREADS
 
 // Include Windows 8-Metro compatible Synchronization API
-#if defined(OVR_OS_WIN32) && defined(NTDDI_WIN8) && (NTDDI_VERSION >= NTDDI_WIN8)
+#if defined(OVR_OS_MS) && defined(NTDDI_WIN8) && (NTDDI_VERSION >= NTDDI_WIN8)
 #include <synchapi.h>
 #endif
 
@@ -41,43 +41,20 @@ namespace OVR {
 
 // ***** Windows Lock implementation
 
-#if defined(OVR_OS_WIN32)
+#if defined(OVR_OS_MS)
 
 // ***** Standard Win32 Lock implementation
 
 // Constructors
 Lock::Lock(unsigned spinCount)
 {
-#if defined(NTDDI_WIN8) && (NTDDI_VERSION >= NTDDI_WIN8)
-   // On Windows 8 we use InitializeCriticalSectionEx due to Metro-Compatibility
-   InitializeCriticalSectionEx(&cs, spinCount,
-                               OVR_DEBUG_SELECT(NULL, CRITICAL_SECTION_NO_DEBUG_INFO));
-#else
-    // Spin count init critical section function prototype for Window NT
-    typedef BOOL (WINAPI *Function_InitializeCriticalSectionAndSpinCount) 
-                 (LPCRITICAL_SECTION lpCriticalSection, DWORD dwSpinCount);
-
-
-    // Try to load function dynamically so that we don't require NT
-    // On Windows NT we will use InitializeCriticalSectionAndSpinCount
-    static  bool initTried = 0;
-    static  Function_InitializeCriticalSectionAndSpinCount pInitFn = 0;
-
-    if (!initTried)
-    {
-        HMODULE hmodule = ::LoadLibrary(OVR_STR("kernel32.dll"));
-        pInitFn     = (Function_InitializeCriticalSectionAndSpinCount)
-                      ::GetProcAddress(hmodule, "InitializeCriticalSectionAndSpinCount");
-        initTried   = true;
-    }
-
-    // Initialize the critical section
-    if (pInitFn)
-        pInitFn(&cs, spinCount);
-    else
-        ::InitializeCriticalSection(&cs);
-#endif
-   
+    #if defined(NTDDI_WIN8) && (NTDDI_VERSION >= NTDDI_WIN8)
+       // On Windows 8 we use InitializeCriticalSectionEx due to Metro-Compatibility
+       InitializeCriticalSectionEx(&cs, (DWORD)spinCount,
+                                   OVR_DEBUG_SELECT(NULL, CRITICAL_SECTION_NO_DEBUG_INFO));
+    #else
+        ::InitializeCriticalSectionAndSpinCount(&cs, (DWORD)spinCount); // This is available with WindowsXP+.
+    #endif
 }
 
 
@@ -107,7 +84,7 @@ Lock* SharedLock::GetLockAddRef()
 
     do {
         oldUseCount = UseCount;
-        if (oldUseCount == LockInitMarker)
+        if (oldUseCount == (int)LockInitMarker)
             continue;
 
         if (oldUseCount == 0)
@@ -137,7 +114,7 @@ void SharedLock::ReleaseLock(Lock* plock)
 
     do {
         oldUseCount = UseCount;
-        OVR_ASSERT(oldUseCount != LockInitMarker);
+        OVR_ASSERT(oldUseCount != (int)LockInitMarker);
 
         if (oldUseCount == 1)
         {
