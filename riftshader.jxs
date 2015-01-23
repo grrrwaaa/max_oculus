@@ -38,7 +38,7 @@ vec2 convertTexCoord(vec2 texcoord) {
 
 void main (void){
 	// position is already in viewport space:
-	gl_Position = vec4(gl_Vertex.xy, 0.5, 1.0);
+	gl_Position = gl_ModelViewMatrix * vec4(gl_Vertex.xy, 0.5, 1.0);
 	
 	// these texture coordinates appear to be in -1,1 range... is that right?
     texcoordR   = convertTexCoord(gl_MultiTexCoord0.xy); 

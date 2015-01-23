@@ -9,7 +9,7 @@
 			"modernui" : 1
 		}
 ,
-		"rect" : [ 75.0, 281.0, 950.0, 498.0 ],
+		"rect" : [ 365.0, 81.0, 1041.0, 583.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 10.0,
@@ -40,13 +40,41 @@
 				"box" : 				{
 					"fontname" : "Verdana",
 					"fontsize" : 10.0,
+					"id" : "obj-35",
+					"linecount" : 2,
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 829.400024, 474.0, 160.0, 31.0 ],
+					"presentation_rect" : [ 735.400024, 475.0, 0.0, 0.0 ],
+					"style" : "",
+					"text" : "Set portrait mode for DK2 extended dmode"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-30",
+					"maxclass" : "toggle",
+					"numinlets" : 1,
+					"numoutlets" : 1,
+					"outlettype" : [ "int" ],
+					"parameter_enable" : 0,
+					"patching_rect" : [ 801.400024, 474.0, 24.0, 24.0 ],
+					"style" : ""
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"fontname" : "Verdana",
+					"fontsize" : 10.0,
 					"id" : "obj-24",
 					"linecount" : 2,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 18.0, 123.0, 232.0, 31.0 ],
-					"presentation_rect" : [ 18.0, 124.0, 0.0, 0.0 ],
 					"style" : "",
 					"text" : "TODO: health&safety warning message, prediction, timewarp, direct-to-rift",
 					"textcolor" : [ 0.2, 0.2, 0.2, 1.0 ]
@@ -62,8 +90,7 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 801.400024, 447.0, 92.0, 31.0 ],
-					"presentation_rect" : [ 800.400024, 447.0, 0.0, 0.0 ],
+					"patching_rect" : [ 929.400024, 424.0, 92.0, 31.0 ],
 					"style" : "",
 					"text" : "Show warning image"
 				}
@@ -77,7 +104,7 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 822.400024, 338.0, 64.0, 19.0 ],
+					"patching_rect" : [ 955.400024, 372.0, 64.0, 19.0 ],
 					"style" : "",
 					"text" : "Messages"
 				}
@@ -91,7 +118,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "int" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 801.400024, 417.0, 24.0, 24.0 ],
+					"patching_rect" : [ 903.400024, 424.0, 24.0, 24.0 ],
 					"style" : ""
 				}
 
@@ -194,7 +221,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 2,
 					"outlettype" : [ "", "" ],
-					"patching_rect" : [ 801.400024, 374.0, 50.0, 33.0 ],
+					"patching_rect" : [ 903.400024, 358.0, 50.0, 33.0 ],
 					"style" : "",
 					"text" : "route warning"
 				}
@@ -208,7 +235,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "int" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 445.399994, 397.0, 24.0, 24.0 ],
+					"patching_rect" : [ 445.399994, 383.0, 24.0, 24.0 ],
 					"style" : ""
 				}
 
@@ -465,7 +492,7 @@
 					"fontsize" : 10.0,
 					"id" : "obj-49",
 					"maxclass" : "newobj",
-					"numinlets" : 7,
+					"numinlets" : 8,
 					"numoutlets" : 0,
 					"patcher" : 					{
 						"fileversion" : 1,
@@ -477,7 +504,7 @@
 							"modernui" : 1
 						}
 ,
-						"rect" : [ 86.0, 78.0, 1300.0, 787.0 ],
+						"rect" : [ 92.0, 78.0, 944.0, 787.0 ],
 						"bglocked" : 0,
 						"openinpresentation" : 0,
 						"default_fontsize" : 12.0,
@@ -505,6 +532,46 @@
 						"style" : "",
 						"subpatcher_template" : "",
 						"boxes" : [ 							{
+								"box" : 								{
+									"comment" : "Portrait (1) or landscape (0, default)",
+									"id" : "obj-56",
+									"maxclass" : "inlet",
+									"numinlets" : 0,
+									"numoutlets" : 1,
+									"outlettype" : [ "int" ],
+									"patching_rect" : [ 1161.0, 645.0, 25.0, 25.0 ],
+									"presentation_rect" : [ 534.5, 58.0, 0.0, 0.0 ],
+									"style" : "default"
+								}
+
+							}
+, 							{
+								"box" : 								{
+									"id" : "obj-63",
+									"maxclass" : "newobj",
+									"numinlets" : 2,
+									"numoutlets" : 1,
+									"outlettype" : [ "int" ],
+									"patching_rect" : [ 1161.0, 679.0, 32.0, 22.0 ],
+									"style" : "",
+									"text" : "* 90"
+								}
+
+							}
+, 							{
+								"box" : 								{
+									"id" : "obj-62",
+									"maxclass" : "newobj",
+									"numinlets" : 1,
+									"numoutlets" : 1,
+									"outlettype" : [ "" ],
+									"patching_rect" : [ 1161.0, 709.0, 127.0, 22.0 ],
+									"style" : "",
+									"text" : "prepend rotatexyz 0 0"
+								}
+
+							}
+, 							{
 								"box" : 								{
 									"id" : "obj-49",
 									"maxclass" : "newobj",
@@ -978,8 +1045,8 @@
 									"numinlets" : 1,
 									"numoutlets" : 2,
 									"outlettype" : [ "jit_matrix", "" ],
-									"patching_rect" : [ 792.0, 655.0, 324.0, 22.0 ],
-									"style" : "default",
+									"patching_rect" : [ 792.0, 655.0, 319.0, 22.0 ],
+									"style" : "",
 									"text" : "jit.gl.shader oculus @name riftshaderR @file riftshader.jxs"
 								}
 
@@ -1695,10 +1762,46 @@
 							}
 , 							{
 								"patchline" : 								{
+									"destination" : [ "obj-63", 0 ],
+									"disabled" : 0,
+									"hidden" : 0,
+									"source" : [ "obj-56", 0 ]
+								}
+
+							}
+, 							{
+								"patchline" : 								{
 									"destination" : [ "obj-33", 0 ],
 									"disabled" : 0,
 									"hidden" : 0,
 									"source" : [ "obj-6", 0 ]
+								}
+
+							}
+, 							{
+								"patchline" : 								{
+									"destination" : [ "obj-40", 0 ],
+									"disabled" : 0,
+									"hidden" : 0,
+									"source" : [ "obj-62", 0 ]
+								}
+
+							}
+, 							{
+								"patchline" : 								{
+									"destination" : [ "obj-41", 0 ],
+									"disabled" : 0,
+									"hidden" : 0,
+									"source" : [ "obj-62", 0 ]
+								}
+
+							}
+, 							{
+								"patchline" : 								{
+									"destination" : [ "obj-62", 0 ],
+									"disabled" : 0,
+									"hidden" : 0,
+									"source" : [ "obj-63", 0 ]
 								}
 
 							}
@@ -1778,7 +1881,7 @@
  ]
 					}
 ,
-					"patching_rect" : [ 303.0, 430.0, 446.200012, 21.0 ],
+					"patching_rect" : [ 303.0, 519.0, 517.400024, 21.0 ],
 					"saved_object_attributes" : 					{
 						"description" : "",
 						"digest" : "",
@@ -1788,7 +1891,8 @@
 					}
 ,
 					"style" : "",
-					"text" : "p oculus_render @near 0.5 @far 100"
+					"text" : "p oculus_render @near 0.5 @far 100",
+					"varname" : "oculus_render"
 				}
 
 			}
@@ -1815,7 +1919,7 @@
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 832.400024, 417.0, 69.0, 21.0 ],
+					"patching_rect" : [ 934.400024, 400.0, 69.0, 21.0 ],
 					"style" : "",
 					"text" : "print oculus"
 				}
@@ -1830,7 +1934,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 95.0, 370.0, 60.0, 21.0 ],
+					"patching_rect" : [ 108.0, 420.0, 60.0, 21.0 ],
 					"style" : "",
 					"text" : "pos 40 45"
 				}
@@ -1950,7 +2054,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 18.0, 397.0, 81.0, 21.0 ],
+					"patching_rect" : [ 18.0, 420.0, 81.0, 21.0 ],
 					"style" : "",
 					"text" : "fullscreen $1"
 				}
@@ -1964,7 +2068,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "int" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 18.0, 370.0, 20.0, 20.0 ],
+					"patching_rect" : [ 18.0, 393.0, 20.0, 20.0 ],
 					"style" : ""
 				}
 
@@ -2079,7 +2183,7 @@
  ]
 					}
 ,
-					"patching_rect" : [ 40.5, 370.0, 41.0, 21.0 ],
+					"patching_rect" : [ 18.0, 364.0, 41.0, 21.0 ],
 					"saved_object_attributes" : 					{
 						"description" : "",
 						"digest" : "",
@@ -2104,7 +2208,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 2,
 					"outlettype" : [ "bang", "" ],
-					"patching_rect" : [ 18.0, 424.0, 178.0, 33.0 ],
+					"patching_rect" : [ 18.0, 492.5, 178.0, 33.0 ],
 					"style" : "",
 					"text" : "jit.window oculus @size 480 270 @sync 1 @fsmenubar 0"
 				}
@@ -2205,7 +2309,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 112.0, 397.0, 78.0, 21.0 ],
+					"patching_rect" : [ 125.0, 447.0, 78.0, 21.0 ],
 					"style" : "",
 					"text_width" : 50.0
 				}
@@ -2425,6 +2529,15 @@
 					"disabled" : 0,
 					"hidden" : 0,
 					"source" : [ "obj-3", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-49", 7 ],
+					"disabled" : 0,
+					"hidden" : 0,
+					"source" : [ "obj-30", 0 ]
 				}
 
 			}
