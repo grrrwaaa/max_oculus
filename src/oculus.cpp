@@ -19,20 +19,14 @@ extern "C" {
 
 #include <new>
 
-#include "OVR.h"
-
+#include "OVR_CAPI.h"
 
 #define OCULUS_DEFAULT_TEXTURE_DIM 2048
 
-#ifdef __APPLE__
-#include "CoreFoundation/CoreFoundation.h"
-#define MY_PLUGIN_BUNDLE_IDENTIFIER "com.cycling74.oculus"
-#endif
-
 t_class *oculus_class;
 static t_symbol * ps_quat;
-
-char bundle_path[MAX_PATH_CHARS];
+static t_symbol * ps_pos;
+static t_symbol * ps_warning;
 
 volatile int libcount = 0;
 
@@ -41,29 +35,54 @@ public:
     t_object	ob;			// the object itself (must be first)
     
     int			fullview;
+    double      predict;    // time (in ms) to predict ahead tracking
     
     // many outlets:
     void *		outlet_q;
+    void *		outlet_p;
+    void *		outlet_p_info;
     void *		outlet_eye[2];
     void *		outlet_mesh[2];
     void *		outlet_c;
     
     // the quaternion orientation of the HMD:
     t_atom		quat[4];
+    t_atom		pos[3];
     
     // LibOVR objects:
     ovrHmd		hmd;
-    ovrHmdDesc	hmdDesc;
     
     t_oculus(int index = 0) {
-        t_atom a[1];
+        t_atom a[4];
+        
+        outlet_c = outlet_new(&ob, 0);
+        outlet_mesh[1] = outlet_new(&ob, "jit_matrix");
+        outlet_eye[1] = outlet_new(&ob, 0);
+        outlet_mesh[0] = outlet_new(&ob, "jit_matrix");
+        outlet_eye[0] = outlet_new(&ob, 0);
+        outlet_p_info = outlet_new(&ob, 0);
+        outlet_p = listout(&ob);
+        outlet_q = listout(&ob);
+        
+        atom_setfloat(quat+0, 0);
+        atom_setfloat(quat+1, 0);
+        atom_setfloat(quat+2, 0);
+        atom_setfloat(quat+3, 1);
+        
+        atom_setfloat(pos+0, 0.f);
+        atom_setfloat(pos+1, 0.f);
+        atom_setfloat(pos+2, 0.f);
         
         fullview = 1;
         
         libcount++;
-        if (libcount == 1 && !ovr_Initialize()) {
-            object_error(&ob, "LibOVR: failed to initialize library");
-            return;
+        if (libcount == 1) {
+            if (!ovr_Initialize()) {
+                object_error(&ob, "LibOVR: failed to initialize library");
+                return;
+            } else {
+                object_post(&ob, "initialized LibOVR %s", ovr_GetVersionString());
+            }
         }
         
         int hmd_count = ovrHmd_Detect();
@@ -73,30 +92,24 @@ public:
         }
         hmd = ovrHmd_Create(index);
         if (hmd == 0) {
-            object_warn(&ob, "LibOVR: HMD not detected, using offline DK1 simulator instead");
-            hmd = ovrHmd_CreateDebug(ovrHmd_DK1);
+            object_warn(&ob, "LibOVR: HMD not detected, using offline DK2 simulator instead");
+            hmd = ovrHmd_CreateDebug(ovrHmd_DK2);
         }
         
-        hmdDesc = *hmd;  //ovrHmd_GetDesc(hmd, &hmdDesc);   // SDK 0.4.3 change *RP*
-        
-        // start tracking:
-        // supported capabilities -- use hmdDesc by default
-        // required capabilities -- use none by default
-        //if (!ovrHmd_StartSensor(hmd, hmdDesc.SensorCaps, 0)) {     // SDK 0.4.3 changed for starting the device - *RP*
-        if(!ovrHmd_ConfigureTracking(hmd, ovrTrackingCap_Orientation | ovrTrackingCap_MagYawCorrection |ovrTrackingCap_Position, 0)) {
-            object_error(&ob, "failed to start LibOVR sensor");
-            //ovrSensorDesc desc;                                   //  API change in 0.4.3  *RP*
-            //if (ovrHmd_GetSensorDesc(hmd, &desc)) {
-            atom_setsym(a, gensym(hmdDesc.SerialNumber));
-            outlet_anything(outlet_c, gensym("serial"), 1, a);
-            //}
+        // configure tracking:
+        // in this case, try to use all available tracking capabilites,
+        // but do not require any to be present for success:
+        if (!ovrHmd_ConfigureTracking(hmd, hmd->TrackingCaps, 0)) {
+            object_error(&ob, "failed to configure/initiate tracking");
         }
+        
+        
     }
     
     ~t_oculus() {
         
         if (hmd) {
-            //ovrHmd_StopSensor(hmd);  Gone in SDK 0.4.3 - check if there's something else to do *RP*
+            //			ovrHmd_StopSensor(hmd);
             ovrHmd_Destroy(hmd);
         }
         
@@ -115,44 +128,68 @@ public:
             return;
         }
         
-#define HMD_CASE(T) case T: { \
-atom_setsym(a, gensym( #T )); \
-outlet_anything(outlet_c, gensym("hmdType"), 1, a); \
-break; \
-}
-        switch(hmdDesc.Type) {
+        // note serial:
+        atom_setsym(a, gensym(hmd->SerialNumber));
+        outlet_anything(outlet_c, gensym("serial"), 1, a);
+        
+        
+    #define HMD_CASE(T) case T: { \
+            atom_setsym(a, gensym( #T )); \
+            outlet_anything(outlet_c, gensym("hmdType"), 1, a); \
+            break; \
+        }
+        switch(hmd->Type) {
                 HMD_CASE(ovrHmd_DK1)
                 HMD_CASE(ovrHmd_DKHD)
-                //HMD_CASE(ovrHmd_CrystalCoveProto) // This has gone in SDK 0.4.3  *RP*.
                 HMD_CASE(ovrHmd_DK2)
             default: {
                 atom_setsym(a, gensym("unknown"));
-                outlet_anything(outlet_c, gensym("hmdType"), 1, a);
+                outlet_anything(outlet_c, gensym("Type"), 1, a);
             }
         }
-#undef HMD_CASE
+    #undef HMD_CASE
         
-        atom_setsym(a, gensym(hmdDesc.Manufacturer));
+        atom_setsym(a, gensym(hmd->Manufacturer));
         outlet_anything(outlet_c, gensym("Manufacturer"), 1, a);
-        atom_setsym(a, gensym(hmdDesc.ProductName));
+        atom_setsym(a, gensym(hmd->ProductName));
         outlet_anything(outlet_c, gensym("ProductName"), 1, a);
-        atom_setsym(a, gensym(hmdDesc.DisplayDeviceName));
+        
+        atom_setlong(a, hmd->FirmwareMajor);
+        atom_setlong(a+1, hmd->FirmwareMinor);
+        outlet_anything(outlet_c, gensym("Firmware"), 2, a);
+        
+        atom_setfloat(a, hmd->CameraFrustumHFovInRadians);
+        outlet_anything(outlet_c, gensym("CameraFrustumHFovInRadians"), 1, a);
+        atom_setfloat(a, hmd->CameraFrustumVFovInRadians);
+        outlet_anything(outlet_c, gensym("CameraFrustumVFovInRadians"), 1, a);
+        atom_setfloat(a, hmd->CameraFrustumNearZInMeters);
+        outlet_anything(outlet_c, gensym("CameraFrustumNearZInMeters"), 1, a);
+        atom_setfloat(a, hmd->CameraFrustumFarZInMeters);
+        outlet_anything(outlet_c, gensym("CameraFrustumFarZInMeters"), 1, a);
+        
+        atom_setsym(a, gensym(hmd->DisplayDeviceName));
         outlet_anything(outlet_c, gensym("DisplayDeviceName"), 1, a);
-        atom_setlong(a, hmdDesc.Resolution.w);
-        atom_setlong(a+1, hmdDesc.Resolution.h);
+        atom_setlong(a, hmd->DisplayId);
+        outlet_anything(outlet_c, gensym("DisplayId"), 1, a);
+        atom_setlong(a, hmd->Resolution.w);
+        atom_setlong(a+1, hmd->Resolution.h);
         outlet_anything(outlet_c, gensym("Resolution"), 2, a);
         
+        atom_setlong(a, hmd->EyeRenderOrder[0]);
+        outlet_anything(outlet_c, gensym("EyeRenderOrder"), 1, a);
+        
+        
         // capabilities:
-        //hmdDesc.HmdCaps
-        //hmdDesc.SensorCaps
-        //hmdDesc.DistortionCaps
-        // hmdDesc.EyeRenderOrder
+        //hmd->HmdCaps
+        //hmd->SensorCaps
+        //hmd->DistortionCaps
+        // hmd->EyeRenderOrder
         
         // now configure per eye:
         for ( int eyeNum = 0; eyeNum < 2; eyeNum++ ) {
             
             // derive eye configuration for given desired FOV:
-            ovrFovPort fovPort = fullview ? hmdDesc.MaxEyeFov[eyeNum] : hmdDesc.DefaultEyeFov[eyeNum];	// or MaxEyeFov?
+            ovrFovPort fovPort = fullview ? hmd->MaxEyeFov[eyeNum] : hmd->DefaultEyeFov[eyeNum];	// or MaxEyeFov?
             ovrEyeRenderDesc eyeDesc = ovrHmd_GetRenderDesc(hmd, (ovrEyeType)eyeNum, fovPort);
             
             // get **recommended** texture dim
@@ -169,9 +206,13 @@ break; \
             atom_setlong(a+3, eyeDesc.DistortedViewport.Size.h);
             outlet_anything(outlet_eye[eyeNum], gensym("DistortedViewport"), 4, a);
             
-            atom_setfloat(a+0, eyeDesc.HmdToEyeViewOffset.x); // ViewAdjust has changed name in 0.4.3 SDK - HmdToEyeViewOffset - *RP*.
-            atom_setfloat(a+1, eyeDesc.HmdToEyeViewOffset.y); // ViewAdjust has changed name in 0.4.3 SDK - HmdToEyeViewOffset - *RP*.
-            atom_setfloat(a+2, eyeDesc.HmdToEyeViewOffset.z); // ViewAdjust has changed name in 0.4.3 SDK - HmdToEyeViewOffset - *RP*.
+            atom_setfloat(a+0, eyeDesc.PixelsPerTanAngleAtCenter.x);
+            atom_setfloat(a+1, eyeDesc.PixelsPerTanAngleAtCenter.y);
+            outlet_anything(outlet_eye[eyeNum], gensym("PixelsPerTanAngleAtCenter"), 2, a);
+            
+            atom_setfloat(a+0, eyeDesc.HmdToEyeViewOffset.x);
+            atom_setfloat(a+1, eyeDesc.HmdToEyeViewOffset.y);
+            atom_setfloat(a+2, eyeDesc.HmdToEyeViewOffset.z);
             outlet_anything(outlet_eye[eyeNum], gensym("ViewAdjust"), 3, a);
             
             // Field Of View (FOV) in tangent of the angle units.
@@ -192,8 +233,8 @@ break; \
             // since we are mapping each eye viewport to a texture, the dims are the same:
             textureSize.w = OCULUS_DEFAULT_TEXTURE_DIM;
             textureSize.h = OCULUS_DEFAULT_TEXTURE_DIM;
-            renderViewport.Size.w = textureSize.w; //hmdDesc.Resolution.w/2;
-            renderViewport.Size.h = textureSize.h; //hmdDesc.Resolution.h;
+            renderViewport.Size.w = textureSize.w; //hmd->Resolution.w/2;
+            renderViewport.Size.h = textureSize.h; //hmd->Resolution.h;
             // texture == viewport, no offset required:
             renderViewport.Pos.x = 0;
             renderViewport.Pos.y = 0;
@@ -205,6 +246,7 @@ break; \
             atom_setfloat(a+2, uvScaleOffsetOut[1].x);
             atom_setfloat(a+3, uvScaleOffsetOut[1].y);
             outlet_anything(outlet_eye[eyeNum], gensym("uvScaleAndOffset"), 4, a);
+            
             
             // Use ovrHmd_CreateDistortionMesh to generate distortion mesh.
             ovrDistortionMesh mesh;
@@ -219,8 +261,6 @@ break; \
                 object_error(&ob, "LibOVR failed to create distortion mesh");
             } else {
                 // export this distortion mesh to Jitter
-                //output_mesh(&mesh, eyeNum);
-                
                 t_jit_matrix_info info;
                 
                 // create index matrix:
@@ -275,13 +315,13 @@ break; \
                     ovrDistortionVertex& vertex = mesh.pVertexData[i];
                     
                     // planes 0,1,2: xyz
-                    cell[0] = vertex.ScreenPosNDC.x;    // .Pos.X;    // Changed in SDK 0.4.3   *RP*
-                    cell[1] = vertex.ScreenPosNDC.y;    // .Pos.Y;    // Changed in SDK 0.4.3   *RP*
+                    cell[0] = vertex.ScreenPosNDC.x;
+                    cell[1] = vertex.ScreenPosNDC.y;
                     cell[2] = 0.5; 	// unused
                     
                     // planes 3,4: texcoord0
-                    cell[3] = vertex.TanEyeAnglesR.x;   // .Tex.R.x;    // Changed in SDK 0.4.3   *RP*
-                    cell[4] = vertex.TanEyeAnglesR.y;   // .Tex.R.y;    // Changed in SDK 0.4.3   *RP*
+                    cell[3] = vertex.TanEyeAnglesR.x;
+                    cell[4] = vertex.TanEyeAnglesR.y;
                     
                     // planes 5,6,7: normal
                     cell[5] = vertex.VignetteFactor;
@@ -290,10 +330,10 @@ break; \
                     
                     // planes 8,9,10,11: rgba
                     // mapped to TexG and TexB (chromatic aberration)
-                    cell[8]  = vertex.TanEyeAnglesG.x;  // .TexG.x;    // Changed in SDK 0.4.3   *RP*
-                    cell[9]  = vertex.TanEyeAnglesG.y;  // .TexG.y;    // Changed in SDK 0.4.3   *RP*
-                    cell[10] = vertex.TanEyeAnglesB.x;  // .TexB.x;    // Changed in SDK 0.4.3   *RP*
-                    cell[11] = vertex.TanEyeAnglesB.y;  // .TexB.y;    // Changed in SDK 0.4.3   *RP*
+                    cell[8]  = vertex.TanEyeAnglesG.x;
+                    cell[9]  = vertex.TanEyeAnglesG.y;
+                    cell[10] = vertex.TanEyeAnglesB.x;
+                    cell[11] = vertex.TanEyeAnglesB.y;
                     
                 }
                 
@@ -309,16 +349,21 @@ break; \
             }
         }
     }
-    
+
     void bang() {
-        //static unsigned int frameIndex = 0;
-        if (hmd) {
+        t_atom a[1];
+        
+        // Health and Safety Warning display state.
+        ovrHSWDisplayState hswDisplayState;
+        ovrHmd_GetHSWDisplayState(hmd, &hswDisplayState);
+        
+        // get tracking state:
+        ovrTrackingState ts = ovrHmd_GetTrackingState(hmd, ovr_GetTimeInSeconds() + (predict * 0.001));
+        
+        if (ts.StatusFlags & ovrStatus_OrientationTracked) {
             
-            //ovrSensorState ss = ovrHmd_GetSensorState(hmd, ovr_GetTimeInSeconds());  // Changed in SDK 0.4.3  *RP*
-            ovrTrackingState ss = ovrHmd_GetTrackingState(hmd, ovr_GetTimeInSeconds());
-            
-            ovrPoseStatef predicted = ss.HeadPose;    // ss.Predicted   // Changed in SDK 0.4.3  *RP*
-            ovrQuatf orient = predicted.ThePose.Orientation;
+            const ovrPoseStatef predicted = ts.HeadPose;
+            const ovrQuatf orient = predicted.ThePose.Orientation;
             
             atom_setfloat(quat  , orient.x);
             atom_setfloat(quat+1, orient.y);
@@ -326,50 +371,71 @@ break; \
             atom_setfloat(quat+3, orient.w);
             outlet_list(outlet_q, 0L, 4, quat);
             
-            // This whole section is for the purpose of computing a predicted orientation
-            // but it requires taking over control of rendering in the max patch
+            if (hswDisplayState.Displayed) {
+                // Dismiss the Health and Safety Warning?
+                // Detect a moderate tap on the side of the HMD.
+                float x = ts.RawSensorData.Accelerometer.x;
+                float y = ts.RawSensorData.Accelerometer.y;
+                float z = ts.RawSensorData.Accelerometer.z;
+                // Arbitrary value and representing moderate tap on the side of the DK2 Rift.
+                if (((x*x)+(y*y)+(z*z)) > 250.f) ovrHmd_DismissHSWDisplay(hmd);
+            }
+            atom_setlong(a, hswDisplayState.Displayed);
+            outlet_anything(outlet_c, ps_warning, 1, a);
             
-            /*
-             
-             //  3. Use ovrHmd_BeginFrameTiming, ovrHmd_GetEyePose and ovrHmd_BeginFrameTiming
-             //     in the rendering loop to obtain timing and predicted view orientation for
-             //     each eye.
-             //      - If relying on timewarp, use ovr_WaitTillTime after rendering+flush, followed
-             //        by ovrHmd_GetEyeTimewarpMatrices to obtain timewarp matrices used
-             //        in distortion pixel shader to reduce latency.
-             
-             
-             //To facilitate prediction, ovrHmd_GetSensorState takes absolute time, in seconds, as a second argument. This is the same value as reported by the ovr_GetTimeInSeconds global function.
-             //			In a production application, however, you should use one of the real-time computed values returned by ovrHmd_BeginFrame or ovrHmd_BeginFrameTiming. Prediction is covered in more detail in the section on Frame Timing.
-             //
-             ovrHmd_GetFrameTiming(hmd, ++frameIndex);
-             ovrFrameTiming hmdFrameTiming = ovrHmd_BeginFrameTiming(hmd, frameIndex);
-             
-             for ( int eyeNum = 0; eyeNum < 2; eyeNum++ ) {
-             ovrEyeType eye = hmdDesc.EyeRenderOrder[eyeNum];
-             ovrPosef eyePose = ovrHmd_GetEyePose(hmd, eye);
-             
-             // Computes timewarp matrices used by distortion mesh shader, these are used to adjust
-             // for orientation change since the last call to ovrHmd_GetEyePose for this eye.
-             // The ovrDistortionVertex::TimeWarpFactor is used to blend between the matrices,
-             // usually representing two different sides of the screen.
-             // Must be called on the same thread as ovrHmd_BeginFrameTiming.
-             //OVR_EXPORT void     ovrHmd_GetEyeTimewarpMatrices(ovrHmd hmd, ovrEyeType eye, ovrPosef renderPose, ovrMatrix4f twmOut[2]);
-             
-             atom_setfloat(quat  , eyePose.Orientation.x);
-             atom_setfloat(quat+1, eyePose.Orientation.y);
-             atom_setfloat(quat+2, eyePose.Orientation.z);
-             atom_setfloat(quat+3, eyePose.Orientation.w);
-             outlet_anything(outlet_c, gensym("eye"), 4, quat);
-             }
-             
-             // Marks the end of game-rendered frame, tracking the necessary timing information. This
-             // function must be called immediately after Present/SwapBuffers + GPU sync. GPU sync is important
-             // before this call to reduce latency and ensure proper timing.
-             // TODO: how to make this fire *after* sync?
-             ovrHmd_EndFrameTiming(hmd);
-             */
         }
+        
+        
+        if (ts.StatusFlags & ovrStatus_PositionConnected) {
+            // this can be zero if the HMD is outside the camera frustum
+            // or is facing away from it
+            // or partially occluded
+            // or it is moving too fast
+            if (ts.StatusFlags & ovrStatus_PositionTracked) {
+                outlet_int(outlet_p_info, (t_atom_long)1);
+                
+                // TODO
+                // float frustumHorizontalFOV = hmd->CameraFrustumHFovInRadians;
+                // float frustumVerticalFOV = hmd->CameraFrustumVHFovInRadians;
+                // float frustumNear = hmd->CameraFrustumNearZInMeters;
+                // float frustumFar = hmd->CameraFrustumFarZInMeters;
+                
+                // axis system of camera has ZX always parallel to ground (presumably by gravity)
+                // default origin is 1m in front of the camera (in +Z), but at the same height (even if camera is tilted)
+                
+                /*
+                 typedef struct ovrPoseStatef_
+                 {
+                 ovrPosef     ThePose;
+                 ovrVector3f  AngularVelocity;
+                 ovrVector3f  LinearVelocity;
+                 ovrVector3f  AngularAcceleration;
+                 ovrVector3f  LinearAcceleration;
+                 double       TimeInSeconds;         // Absolute time of this state sample.
+                 } ovrPoseStatef;
+                 */
+                
+                const ovrPoseStatef predicted = ts.HeadPose;
+                const ovrVector3f position = predicted.ThePose.Position;
+                
+                atom_setfloat(pos  , position.x);
+                atom_setfloat(pos+1, position.y);
+                atom_setfloat(pos+2, position.z);
+                outlet_list(outlet_p, 0L, 3, pos);
+                
+                // TODO: accessors for these:
+                // CameraPose is the pose of the camera relative to the origin
+                // LeveledCameraPose is the same but with roll & pitch zeroed out
+                
+                
+            } else {
+                outlet_int(outlet_p_info, (t_atom_long)0);
+                // is there some kind of predictive interpolation we can use here?
+                
+                outlet_list(outlet_p, 0L, 3, pos);
+            }
+        }
+        
     }
 };
 
@@ -382,6 +448,14 @@ t_max_err oculus_notify(t_oculus *x, t_symbol *s, t_symbol *msg, void *sender, v
         object_post((t_object *)x, "notify %s (self %d)", msg->s_name, sender == x);
     }
     return 0;
+}
+
+void oculus_recenter(t_oculus * x) {
+    if (x->hmd) ovrHmd_RecenterPose(x->hmd);
+}
+
+void oculus_dismiss(t_oculus * x) {
+    ovrHmd_DismissHSWDisplay(x->hmd);
 }
 
 void oculus_bang(t_oculus * x) {
@@ -413,19 +487,23 @@ void oculus_assist(t_oculus *x, void *b, long m, long a, char *s)
         }
     } else {	// outlet
         if (a == 0) {
-            sprintf(s, "HMD orientation quaternion (list)"); 
+            sprintf(s, "HMD orientation quaternion (list)");
         } else if (a == 1) {
-            sprintf(s, "HMD left eye properties (messages)"); 
+            sprintf(s, "HMD position (list)");
         } else if (a == 2) {
-            sprintf(s, "HMD left eye mesh (jit_matrix)"); 
+            sprintf(s, "HMD position tracking status (messages)");
         } else if (a == 3) {
-            sprintf(s, "HMD right eye properties (messages)"); 
+            sprintf(s, "HMD left eye properties (messages)");
         } else if (a == 4) {
-            sprintf(s, "HMD right eye mesh (jit_matrix)");  
+            sprintf(s, "HMD left eye mesh (jit_matrix)");
         } else if (a == 5) {
+            sprintf(s, "HMD right eye properties (messages)");
+        } else if (a == 6) {
+            sprintf(s, "HMD right eye mesh (jit_matrix)");
+        } else if (a == 7) {
             sprintf(s, "HMD properties (messages)");
         } else {
-            sprintf(s, "I am outlet %ld", a); 
+            sprintf(s, "I am outlet %ld", a);
         }
     }
 }
@@ -446,18 +524,14 @@ void *oculus_new(t_symbol *s, long argc, t_atom *argv)
     long attrstart;
     t_symbol *dest_name_sym = _jit_sym_nothing;
     
+    int index = 0;
+    if (argc > 0 && atom_gettype(argv) == A_LONG) index = atom_getlong(argv);
+    
     if (x = (t_oculus *)object_alloc(oculus_class)) {
-        
-        x->outlet_c = outlet_new(x, 0);
-        x->outlet_mesh[1] = outlet_new(x, "jit_matrix");
-        x->outlet_eye[1] = outlet_new(x, 0);
-        x->outlet_mesh[0] = outlet_new(x, "jit_matrix");
-        x->outlet_eye[0] = outlet_new(x, 0);
-        x->outlet_q = listout(x);
         
         // default attrs:
         // initialize in-place:
-        x = new (x) t_oculus();
+        x = new (x) t_oculus(index);
         
         // apply attrs:
         attr_args_process(x, argc, argv);
@@ -473,18 +547,8 @@ int C74_EXPORT main(void) {
     void *ob3d;
     
     ps_quat = gensym("quat");
-    
-#ifdef __APPLE__
-    CFBundleRef mainBundle = CFBundleGetBundleWithIdentifier(CFSTR(MY_PLUGIN_BUNDLE_IDENTIFIER));
-    CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL(mainBundle);
-    if (!CFURLGetFileSystemRepresentation(resourcesURL, TRUE, (UInt8 *)bundle_path, MAX_PATH_CHARS))
-    {
-        // error!
-    }
-    CFRelease(resourcesURL);
-    
-    printf("bundle path %s\n", bundle_path);
-#endif
+    ps_pos = gensym("pos");
+    ps_warning = gensym("warning");
     
     common_symbols_init();
     
@@ -496,8 +560,11 @@ int C74_EXPORT main(void) {
     
     //class_addmethod(maxclass, (method)oculus_jit_matrix, "jit_matrix", A_GIMME, 0); 
     class_addmethod(maxclass, (method)oculus_bang, "bang", 0);
+    class_addmethod(maxclass, (method)oculus_recenter, "recenter", 0);
+    class_addmethod(maxclass, (method)oculus_dismiss, "dismiss", 0);
     class_addmethod(maxclass, (method)oculus_configure, "configure", 0);
     
+    CLASS_ATTR_FLOAT(maxclass, "predict", 0, t_oculus, predict);
     CLASS_ATTR_LONG(maxclass, "fullview", 0, t_oculus, fullview);
     CLASS_ATTR_ACCESSORS(maxclass, "fullview", NULL, oculus_fullview_set);
     CLASS_ATTR_STYLE_LABEL(maxclass, "fullview", 0, "onoff", "use default (0) or max (1) field of view");
