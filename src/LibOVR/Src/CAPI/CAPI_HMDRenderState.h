@@ -5,16 +5,16 @@ Content     :   Combines all of the rendering state associated with the HMD
 Created     :   February 2, 2014
 Authors     :   Michael Antonov
 
-Copyright   :   Copyright 2014 Oculus VR, Inc. All Rights reserved.
+Copyright   :   Copyright 2014 Oculus VR, LLC All Rights reserved.
 
-Licensed under the Oculus VR Rift SDK License Version 3.1 (the "License"); 
+Licensed under the Oculus VR Rift SDK License Version 3.2 (the "License"); 
 you may not use the Oculus VR Rift SDK except in compliance with the License, 
 which is provided at the time of installation or download, or which 
 otherwise accompanies this software in either electronic or hard copy form.
 
 You may obtain a copy of the License at
 
-http://www.oculusvr.com/licenses/LICENSE-3.1 
+http://www.oculusvr.com/licenses/LICENSE-3.2 
 
 Unless required by applicable law or agreed to in writing, the Oculus VR SDK 
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -30,64 +30,45 @@ limitations under the License.
 #include "../OVR_CAPI.h"
 #include "../Kernel/OVR_Math.h"
 #include "../Util/Util_Render_Stereo.h"
-
+#include "../Service/Service_NetSessionCommon.h"
 
 namespace OVR { namespace CAPI {
 
 using namespace OVR::Util::Render;
 
+
 //-------------------------------------------------------------------------------------
 // ***** HMDRenderState
 
 // Combines all of the rendering setup information about one HMD.
-
-class HMDRenderState : public NewOverrideBase 
+// This structure only ever exists inside HMDState, but this 
+// declaration is in a separate file to reduce #include dependencies.
+// All actual lifetime and update control is done by the surrounding HMDState.
+struct HMDRenderState
 {
-    // Quiet assignment compiler warning.
-    void operator = (const HMDRenderState&) { }
-public:   
+    // Utility query functions.
+    ovrHmdDesc          GetDesc() const;
+    ovrSizei            GetFOVTextureSize(int eye, ovrFovPort fov, float pixelsPerDisplayPixel) const;
+    ovrEyeRenderDesc    CalcRenderDesc(ovrEyeType eyeType, const ovrFovPort& fov) const;
 
-    HMDRenderState(ovrHmd hmd, Profile* userProfile, const OVR::HMDInfo& hmdInfo);
-    virtual ~HMDRenderState();
+    HMDInfo                 OurHMDInfo;
 
-
-    // *** Rendering Setup
-
-    // Delegated access APIs
-    ovrHmdDesc GetDesc();
-    ovrSizei   GetFOVTextureSize(int eye, ovrFovPort fov, float pixelsPerDisplayPixel);
-
-    ovrEyeRenderDesc calcRenderDesc(ovrEyeType eyeType, const ovrFovPort& fov);
-
-    void       setupRenderDesc(ovrEyeRenderDesc eyeRenderDescOut[2],
-                               const ovrFovPort eyeFovIn[2]);
-public:
-    
-    // HMDInfo shouldn't change, as its string pointers are passed out.    
-    ovrHmd                  HMD;
-    const OVR::HMDInfo&     HMDInfo;
-
-    //const char*             pLastError;
-
-    HmdRenderInfo            RenderInfo;    
-    DistortionRenderDesc     Distortion[2];
-    ovrEyeRenderDesc         EyeRenderDesc[2]; 
+    HmdRenderInfo           RenderInfo;
+    DistortionRenderDesc    Distortion[2];
+    ovrEyeRenderDesc        EyeRenderDesc[2]; 
 
     // Clear color used for distortion
-    float                    ClearColor[4];
+    float                   ClearColor[4];
 
     // Pose at which last time the eye was rendered, as submitted by EndEyeRender.
-    ovrPosef                 EyeRenderPoses[2];
+    ovrPosef                EyeRenderPoses[2];
 
     // Capabilities passed to Configure.
-    unsigned                 EnabledHmdCaps;
-    unsigned                 DistortionCaps;
+    unsigned                EnabledHmdCaps;
+    unsigned                DistortionCaps;     // enum ovrDistortionCaps
 };
 
 
 }} // namespace OVR::CAPI
 
-
 #endif // OVR_CAPI_HMDState_h
-
-
