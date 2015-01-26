@@ -11,7 +11,6 @@
 
 uniform vec4 uvScaleAndOffset;
 uniform vec2 dim;
-uniform sampler2D scene;
 
 varying vec2 texcoordR, texcoordG, texcoordB;
 varying float VignetteFactor;
@@ -22,18 +21,18 @@ vec2 convertTexCoord(vec2 texcoord) {
 	// relative to the eye of the HMD.  Apply the 3x3 timewarp rotation to these vectors.
 	//vec3 v = vec3( rotMat * vec4(texcoord.xy, 1., 1.) );
 	// Project them back onto the Z=1 plane of the rendered images.
-	//vec2 flat = (v.xy / v.z);
+	//vec2 flattened = (v.xy / v.z);
 	
-	vec2 flat = texcoord.xy;
+	vec2 flattened = texcoord.xy;
 	
 	// Scale into UV lookup space (depending on eye)
-	flat = (uvScaleAndOffset.xy * flat + uvScaleAndOffset.zw);
+	flattened = (uvScaleAndOffset.xy * flat + uvScaleAndOffset.zw);
 	
 	// as usual, OpenGL textures are upside down
-	flat.y = 1. - flat.y;
+	flattened.y = 1. - flattened.y;
 	
 	// scale up to tex dim because Jitter prefers Sampler2DRect:
-	return flat * dim;
+	return flattened * dim;
 }
 
 void main (void){
