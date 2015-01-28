@@ -27,3 +27,6 @@
 *.opensdf
 *.xcworkspace
 *.sdf
+src/oculus.sdf
+*.sdf
+*.suo
