@@ -26,7 +26,7 @@ vec2 convertTexCoord(vec2 texcoord) {
 	vec2 flattened = texcoord.xy;
 	
 	// Scale into UV lookup space (depending on eye)
-	flattened = (uvScaleAndOffset.xy * flat + uvScaleAndOffset.zw);
+	flattened = (uvScaleAndOffset.xy * flattened + uvScaleAndOffset.zw);
 	
 	// as usual, OpenGL textures are upside down
 	flattened.y = 1. - flattened.y;
