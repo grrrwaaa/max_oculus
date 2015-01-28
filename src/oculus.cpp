@@ -20,6 +20,7 @@ extern "C" {
 #include <new>
 
 #include "OVR_CAPI.h"
+#include "OVR_CAPI_GL.h"
 
 #define OCULUS_DEFAULT_TEXTURE_DIM 2048
 
@@ -48,6 +49,10 @@ public:
     // the quaternion orientation of the HMD:
     t_atom		quat[4];
     t_atom		pos[3];
+
+	// the dimension of the texture passed to direct render
+	ovrSizei	texture_dim;
+	int			multisample;
     
     // LibOVR objects:
     ovrHmd		hmd;
@@ -74,6 +79,10 @@ public:
         atom_setfloat(pos+2, 0.f);
         
         fullview = 1;
+		multisample = 1;
+
+		texture_dim.w = 2048;
+		texture_dim.h = 2048;
         
         libcount++;
         if (libcount == 1) {
@@ -184,13 +193,40 @@ public:
         //hmd->SensorCaps
         //hmd->DistortionCaps
         // hmd->EyeRenderOrder
+
+		// Distortion capabilities will depend on 'distortionCaps' flags; user should rely on
+        // appropriate shaders based on their settings.
+        // distortion caps:
+        //ovrDistortionCap_Chromatic	= 0x01,		//	Supports chromatic aberration correction.
+        //ovrDistortionCap_TimeWarp	= 0x02,		//	Supports timewarp.
+        //ovrDistortionCap_Vignette	= 0x08		//	Supports vignetting around the edges of the view.
+        unsigned int distortionCaps = ovrDistortionCap_Chromatic | ovrDistortionCap_Vignette;
+           
+		ovrGLConfig apiConfig;
+		apiConfig.OGL.Header.API = ovrRenderAPI_OpenGL;
+		apiConfig.OGL.Header.BackBufferSize = hmd->Resolution;
+		apiConfig.OGL.Header.Multisample = multisample;
+		/// HWND The optional window handle. If unset, rendering will use the current window.
+		apiConfig.OGL.Window = window;
+		/// HDC The optional device context. If unset, rendering will use a new context.
+		apiConfig.OGL.DC = dc;
+		
+		ovrFovPort eyeFovIn[2];
+        ovrEyeRenderDesc eyeRenderDescOut[2];
+
+		// configure per eye:
+        for ( int eyeNum = 0; eyeNum < 2; eyeNum++ ) {
+			// derive eye configuration for given desired FOV:
+			eyeFovIn[eyeNum] = fullview ? hmd->MaxEyeFov[eyeNum] : hmd->DefaultEyeFov[eyeNum];	// or MaxEyeFov?
+		}
+		ovrHmd_ConfigureRendering(hmd, &apiConfig.Config, distortionCaps, eyeFovIn, eyeRenderDescOut);
         
         // now configure per eye:
         for ( int eyeNum = 0; eyeNum < 2; eyeNum++ ) {
             
             // derive eye configuration for given desired FOV:
-            ovrFovPort fovPort = fullview ? hmd->MaxEyeFov[eyeNum] : hmd->DefaultEyeFov[eyeNum];	// or MaxEyeFov?
-            ovrEyeRenderDesc eyeDesc = ovrHmd_GetRenderDesc(hmd, (ovrEyeType)eyeNum, fovPort);
+            ovrFovPort& fovPort = eyeFovIn[eyeNum];
+            ovrEyeRenderDesc& eyeDesc = eyeRenderDescOut[eyeNum];
             
             // get **recommended** texture dim
             // depends on the FOV and desired pixel quality
@@ -250,13 +286,6 @@ public:
             
             // Use ovrHmd_CreateDistortionMesh to generate distortion mesh.
             ovrDistortionMesh mesh;
-            // Distortion capabilities will depend on 'distortionCaps' flags; user should rely on
-            // appropriate shaders based on their settings.
-            // distortion caps:
-            //ovrDistortionCap_Chromatic	= 0x01,		//	Supports chromatic aberration correction.
-            //ovrDistortionCap_TimeWarp	= 0x02,		//	Supports timewarp.
-            //ovrDistortionCap_Vignette	= 0x08		//	Supports vignetting around the edges of the view.
-            unsigned int distortionCaps = ovrDistortionCap_Chromatic | ovrDistortionCap_Vignette;
             if (!ovrHmd_CreateDistortionMesh(hmd, (ovrEyeType)eyeNum, fovPort, distortionCaps, &mesh)) {
                 object_error(&ob, "LibOVR failed to create distortion mesh");
             } else {
@@ -566,6 +595,8 @@ int C74_EXPORT main(void) {
     
     CLASS_ATTR_FLOAT(maxclass, "predict", 0, t_oculus, predict);
     CLASS_ATTR_LONG(maxclass, "fullview", 0, t_oculus, fullview);
+    CLASS_ATTR_LONG(maxclass, "multisample", 0, t_oculus, multisample);
+	CLASS_ATTR_LONG_ARRAY(maxclass, "texture_dim", 0, t_oculus, texture_dim, 2);
     CLASS_ATTR_ACCESSORS(maxclass, "fullview", NULL, oculus_fullview_set);
     CLASS_ATTR_STYLE_LABEL(maxclass, "fullview", 0, "onoff", "use default (0) or max (1) field of view");
     

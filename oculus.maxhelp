@@ -9,7 +9,7 @@
 			"modernui" : 1
 		}
 ,
-		"rect" : [ 365.0, 81.0, 1041.0, 583.0 ],
+		"rect" : [ 75.0, 345.0, 1041.0, 583.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 10.0,
@@ -46,7 +46,6 @@
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 829.400024, 474.0, 160.0, 31.0 ],
-					"presentation_rect" : [ 735.400024, 475.0, 0.0, 0.0 ],
 					"style" : "",
 					"text" : "Set portrait mode for DK2 extended dmode"
 				}
@@ -333,7 +332,7 @@
 							"modernui" : 1
 						}
 ,
-						"rect" : [ 559.0, 78.0, 721.0, 439.0 ],
+						"rect" : [ 559.0, 84.0, 721.0, 439.0 ],
 						"bglocked" : 0,
 						"openinpresentation" : 0,
 						"default_fontsize" : 12.0,
@@ -433,7 +432,7 @@
 									"numinlets" : 1,
 									"numoutlets" : 2,
 									"outlettype" : [ "jit_matrix", "" ],
-									"patching_rect" : [ 81.0, 93.0, 506.0, 35.0 ],
+									"patching_rect" : [ 81.0, 93.0, 506.0, 36.0 ],
 									"style" : "default",
 									"text" : "jit.gl.gridshape world @shape opencube @rotate 90 1 0 0 @position 0 0 0 @depth_enable 1 @blend_enable 1 @material rock @scale 50 50 50 @dim 51 51 @poly_mode 1 1"
 								}
@@ -504,7 +503,7 @@
 							"modernui" : 1
 						}
 ,
-						"rect" : [ 92.0, 78.0, 944.0, 787.0 ],
+						"rect" : [ 92.0, 84.0, 944.0, 787.0 ],
 						"bglocked" : 0,
 						"openinpresentation" : 0,
 						"default_fontsize" : 12.0,
@@ -540,7 +539,6 @@
 									"numoutlets" : 1,
 									"outlettype" : [ "int" ],
 									"patching_rect" : [ 1161.0, 645.0, 25.0, 25.0 ],
-									"presentation_rect" : [ 534.5, 58.0, 0.0, 0.0 ],
 									"style" : "default"
 								}
 
@@ -707,7 +705,7 @@
 									"maxclass" : "comment",
 									"numinlets" : 1,
 									"numoutlets" : 0,
-									"patching_rect" : [ 345.5, 687.0, 213.0, 33.0 ],
+									"patching_rect" : [ 345.5, 687.0, 213.0, 34.0 ],
 									"style" : "default",
 									"text" : "Render onto LibOVR's meshes using the distortion shader"
 								}
@@ -1096,9 +1094,9 @@
 									"numinlets" : 1,
 									"numoutlets" : 2,
 									"outlettype" : [ "", "" ],
-									"patching_rect" : [ 175.0, 106.0, 179.0, 22.0 ],
+									"patching_rect" : [ 175.0, 106.0, 185.0, 22.0 ],
 									"style" : "",
-									"text" : "jit.anim.drive world @ui_listen 1"
+									"text" : "jit.anim.drive oculus @ui_listen 1"
 								}
 
 							}
@@ -1227,7 +1225,7 @@
 									"numinlets" : 9,
 									"numoutlets" : 2,
 									"outlettype" : [ "jit_matrix", "" ],
-									"patching_rect" : [ 610.5, 745.0, 545.0, 35.0 ],
+									"patching_rect" : [ 610.5, 745.0, 545.0, 36.0 ],
 									"style" : "",
 									"text" : "jit.gl.mesh oculus @blend_enable 0 @depth_enable 0 @auto_material 0 @draw_mode triangles @cache_mode displaylist @transform_reset 2 @shader riftshaderR"
 								}
@@ -1241,7 +1239,7 @@
 									"numinlets" : 9,
 									"numoutlets" : 2,
 									"outlettype" : [ "jit_matrix", "" ],
-									"patching_rect" : [ 19.5, 745.0, 543.0, 35.0 ],
+									"patching_rect" : [ 19.5, 745.0, 543.0, 36.0 ],
 									"style" : "",
 									"text" : "jit.gl.mesh oculus @blend_enable 0 @depth_enable 0 @auto_material 0 @draw_mode triangles @cache_mode displaylist @transform_reset 2 @shader riftshaderL"
 								}
@@ -2571,8 +2569,8 @@
 			}
  ],
 		"dependency_cache" : [ 			{
-				"name" : "oculus.mxo",
-				"type" : "iLaX"
+				"name" : "oculus.mxe",
+				"type" : "iLaF"
 			}
  ],
 		"embedsnapshot" : 0
