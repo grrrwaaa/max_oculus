@@ -220,7 +220,8 @@ public:
 			eyeFovIn[eyeNum] = fullview ? hmd->MaxEyeFov[eyeNum] : hmd->DefaultEyeFov[eyeNum];	// or MaxEyeFov?
 		}
 		ovrHmd_ConfigureRendering(hmd, &apiConfig.Config, distortionCaps, eyeFovIn, eyeRenderDescOut);
-        
+        ovrHmd_AttachToWindow(hmd, window, NULL, NULL);
+
         // now configure per eye:
         for ( int eyeNum = 0; eyeNum < 2; eyeNum++ ) {
             
