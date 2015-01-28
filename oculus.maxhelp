@@ -503,7 +503,7 @@
 							"modernui" : 1
 						}
 ,
-						"rect" : [ 92.0, 84.0, 944.0, 787.0 ],
+						"rect" : [ 131.0, 96.0, 1370.0, 787.0 ],
 						"bglocked" : 0,
 						"openinpresentation" : 0,
 						"default_fontsize" : 12.0,
@@ -531,6 +531,30 @@
 						"style" : "",
 						"subpatcher_template" : "",
 						"boxes" : [ 							{
+								"box" : 								{
+									"id" : "obj-55",
+									"maxclass" : "newobj",
+									"numinlets" : 1,
+									"numoutlets" : 0,
+									"patching_rect" : [ 1028.833252, 268.0, 61.0, 22.0 ],
+									"style" : "",
+									"text" : "print right"
+								}
+
+							}
+, 							{
+								"box" : 								{
+									"id" : "obj-22",
+									"maxclass" : "newobj",
+									"numinlets" : 1,
+									"numoutlets" : 0,
+									"patching_rect" : [ 466.0, 268.0, 53.0, 22.0 ],
+									"style" : "",
+									"text" : "print left"
+								}
+
+							}
+, 							{
 								"box" : 								{
 									"comment" : "Portrait (1) or landscape (0, default)",
 									"id" : "obj-56",
@@ -692,7 +716,7 @@
 									"maxclass" : "comment",
 									"numinlets" : 1,
 									"numoutlets" : 0,
-									"patching_rect" : [ 978.5, 35.0, 301.0, 33.0 ],
+									"patching_rect" : [ 978.5, 35.0, 301.0, 34.0 ],
 									"style" : "default",
 									"text" : "Thanks for inspiration to patches of Perry Hoberman and Rob ZEAL, PRs from KCOUL"
 								}
@@ -1733,6 +1757,15 @@
 							}
 , 							{
 								"patchline" : 								{
+									"destination" : [ "obj-22", 0 ],
+									"disabled" : 0,
+									"hidden" : 0,
+									"source" : [ "obj-5", 3 ]
+								}
+
+							}
+, 							{
+								"patchline" : 								{
 									"destination" : [ "obj-24", 0 ],
 									"disabled" : 0,
 									"hidden" : 0,
@@ -1846,6 +1879,15 @@
 									"disabled" : 0,
 									"hidden" : 0,
 									"source" : [ "obj-8", 1 ]
+								}
+
+							}
+, 							{
+								"patchline" : 								{
+									"destination" : [ "obj-55", 0 ],
+									"disabled" : 0,
+									"hidden" : 0,
+									"source" : [ "obj-8", 3 ]
 								}
 
 							}
