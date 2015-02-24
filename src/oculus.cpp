@@ -28,8 +28,6 @@ static t_symbol * ps_quat;
 static t_symbol * ps_pos;
 static t_symbol * ps_warning;
 
-volatile int libcount = 0;
-
 class t_oculus {
 public:
     t_object	ob;			// the object itself (must be first)
@@ -53,8 +51,6 @@ public:
     ovrHmd		hmd;
     
     t_oculus(int index = 0) {
-        t_atom a[4];
-        
         outlet_c = outlet_new(&ob, 0);
         outlet_mesh[1] = outlet_new(&ob, "jit_matrix");
         outlet_eye[1] = outlet_new(&ob, 0);
@@ -75,16 +71,6 @@ public:
         
         fullview = 1;
         
-        libcount++;
-        if (libcount == 1) {
-            if (!ovr_Initialize()) {
-                object_error(&ob, "LibOVR: failed to initialize library");
-                return;
-            } else {
-                object_post(&ob, "initialized LibOVR %s", ovr_GetVersionString());
-            }
-        }
-        
         int hmd_count = ovrHmd_Detect();
         object_post(&ob, "%d HMDs detected", hmd_count);
         if (hmd_count > 0 && index < hmd_count) {
@@ -102,21 +88,12 @@ public:
         if (!ovrHmd_ConfigureTracking(hmd, hmd->TrackingCaps, 0)) {
             object_error(&ob, "failed to configure/initiate tracking");
         }
-        
-        
     }
     
     ~t_oculus() {
-        
         if (hmd) {
             //			ovrHmd_StopSensor(hmd);
             ovrHmd_Destroy(hmd);
-        }
-        
-        // release library nicely
-        //libcount--; // was crashy
-        if (libcount == 0) {
-            ovr_Shutdown();
         }
     }
     
@@ -520,14 +497,11 @@ void oculus_free(t_oculus *x) {
 void *oculus_new(t_symbol *s, long argc, t_atom *argv)
 {
     t_oculus *x = NULL;
-    //long i;
-    long attrstart;
-    t_symbol *dest_name_sym = _jit_sym_nothing;
-    
+	
     int index = 0;
     if (argc > 0 && atom_gettype(argv) == A_LONG) index = atom_getlong(argv);
     
-    if (x = (t_oculus *)object_alloc(oculus_class)) {
+    if ((x = (t_oculus *)object_alloc(oculus_class))) {
         
         // default attrs:
         // initialize in-place:
@@ -542,17 +516,26 @@ void *oculus_new(t_symbol *s, long argc, t_atom *argv)
     return (x);
 }
 
+void oculus_quit() {
+	ovr_Shutdown();
+}
+
 int C74_EXPORT main(void) {	
     t_class *maxclass;
-    void *ob3d;
-    
+	
+	if (!ovr_Initialize()) {
+		object_error(NULL, "LibOVR: failed to initialize library");
+		return 0;
+	}
+	object_post(NULL, "initialized LibOVR %s", ovr_GetVersionString());
+	quittask_install((method)oculus_quit, NULL);
+	
+	common_symbols_init();
     ps_quat = gensym("quat");
     ps_pos = gensym("pos");
-    ps_warning = gensym("warning");
-    
-    common_symbols_init();
-    
-    maxclass = class_new("oculus", (method)oculus_new, (method)oculus_free, (long)sizeof(t_oculus), 
+	ps_warning = gensym("warning");
+	
+    maxclass = class_new("oculus", (method)oculus_new, (method)oculus_free, (long)sizeof(t_oculus),
                          0L, A_GIMME, 0);
     
     class_addmethod(maxclass, (method)oculus_assist, "assist", A_CANT, 0);
