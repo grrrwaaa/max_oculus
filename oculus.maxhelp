@@ -9,7 +9,7 @@
 			"modernui" : 1
 		}
 ,
-		"rect" : [ 332.0, 211.0, 1029.0, 517.0 ],
+		"rect" : [ 681.0, 271.0, 1029.0, 517.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 10.0,
@@ -37,6 +37,18 @@
 		"style" : "",
 		"subpatcher_template" : "",
 		"boxes" : [ 			{
+				"box" : 				{
+					"id" : "obj-31",
+					"maxclass" : "button",
+					"numinlets" : 1,
+					"numoutlets" : 1,
+					"outlettype" : [ "bang" ],
+					"patching_rect" : [ 523.0, 152.0, 24.0, 24.0 ],
+					"style" : ""
+				}
+
+			}
+, 			{
 				"box" : 				{
 					"bubble" : 1,
 					"fontname" : "Verdana",
@@ -1256,9 +1268,9 @@
 									"numinlets" : 1,
 									"numoutlets" : 1,
 									"outlettype" : [ "" ],
-									"patching_rect" : [ 32.0, 250.0, 257.0, 22.0 ],
+									"patching_rect" : [ 32.0, 251.0, 257.0, 22.0 ],
 									"style" : "",
-									"text" : "jit.gl.light world @type point @position 12 21 4"
+									"text" : "jit.gl.light world @type point @position 50 20 0"
 								}
 
 							}
@@ -1837,7 +1849,7 @@
 							"modernui" : 1
 						}
 ,
-						"rect" : [ 92.0, 84.0, 1292.0, 787.0 ],
+						"rect" : [ 416.0, 180.0, 1292.0, 787.0 ],
 						"bglocked" : 0,
 						"openinpresentation" : 0,
 						"default_fontsize" : 12.0,
@@ -1865,6 +1877,34 @@
 						"style" : "",
 						"subpatcher_template" : "",
 						"boxes" : [ 							{
+								"box" : 								{
+									"id" : "obj-67",
+									"maxclass" : "message",
+									"numinlets" : 2,
+									"numoutlets" : 1,
+									"outlettype" : [ "" ],
+									"patching_rect" : [ 165.5, 99.0, 83.0, 22.0 ],
+									"presentation_rect" : [ 181.0, 99.0, 0.0, 0.0 ],
+									"style" : "default",
+									"text" : "anim_reset"
+								}
+
+							}
+, 							{
+								"box" : 								{
+									"id" : "obj-61",
+									"maxclass" : "newobj",
+									"numinlets" : 1,
+									"numoutlets" : 2,
+									"outlettype" : [ "", "" ],
+									"patching_rect" : [ 19.5, 215.0, 111.0, 22.0 ],
+									"presentation_rect" : [ 615.5, 135.0, 0.0, 0.0 ],
+									"style" : "",
+									"text" : "jit.anim.node world"
+								}
+
+							}
+, 							{
 								"box" : 								{
 									"id" : "obj-55",
 									"maxclass" : "message",
@@ -2402,7 +2442,7 @@
 									"maxclass" : "comment",
 									"numinlets" : 1,
 									"numoutlets" : 0,
-									"patching_rect" : [ 175.0, 76.0, 199.0, 20.0 ],
+									"patching_rect" : [ 263.166656, 35.0, 199.0, 20.0 ],
 									"style" : "default",
 									"text" : "Combine navigation & orientation"
 								}
@@ -2441,22 +2481,9 @@
 									"numinlets" : 1,
 									"numoutlets" : 2,
 									"outlettype" : [ "", "" ],
-									"patching_rect" : [ 175.0, 106.0, 179.0, 22.0 ],
+									"patching_rect" : [ 188.166656, 136.0, 179.0, 22.0 ],
 									"style" : "",
 									"text" : "jit.anim.drive world @ui_listen 1"
-								}
-
-							}
-, 							{
-								"box" : 								{
-									"id" : "obj-25",
-									"maxclass" : "message",
-									"numinlets" : 2,
-									"numoutlets" : 1,
-									"outlettype" : [ "" ],
-									"patching_rect" : [ 80.0, 106.0, 83.0, 22.0 ],
-									"style" : "default",
-									"text" : "anim_reset"
 								}
 
 							}
@@ -2480,9 +2507,9 @@
 									"numinlets" : 1,
 									"numoutlets" : 2,
 									"outlettype" : [ "", "" ],
-									"patching_rect" : [ 19.5, 161.0, 219.0, 22.0 ],
+									"patching_rect" : [ 19.5, 136.0, 111.0, 22.0 ],
 									"style" : "",
-									"text" : "jit.anim.node oculus @movemode local"
+									"text" : "jit.anim.node world"
 								}
 
 							}
@@ -2699,7 +2726,6 @@
 									"destination" : [ "obj-27", 0 ],
 									"disabled" : 0,
 									"hidden" : 0,
-									"midpoints" : [ 29.0, 152.0, 29.0, 152.0 ],
 									"source" : [ "obj-13", 0 ]
 								}
 
@@ -2835,27 +2861,7 @@
 							}
 , 							{
 								"patchline" : 								{
-									"destination" : [ "obj-27", 0 ],
-									"disabled" : 0,
-									"hidden" : 0,
-									"midpoints" : [ 89.5, 151.0, 29.0, 151.0 ],
-									"source" : [ "obj-25", 0 ]
-								}
-
-							}
-, 							{
-								"patchline" : 								{
-									"destination" : [ "obj-44", 0 ],
-									"disabled" : 0,
-									"hidden" : 0,
-									"midpoints" : [ 29.0, 195.0, 620.0, 195.0 ],
-									"source" : [ "obj-27", 0 ]
-								}
-
-							}
-, 							{
-								"patchline" : 								{
-									"destination" : [ "obj-45", 0 ],
+									"destination" : [ "obj-61", 0 ],
 									"disabled" : 0,
 									"hidden" : 0,
 									"source" : [ "obj-27", 0 ]
@@ -3174,6 +3180,24 @@
 							}
 , 							{
 								"patchline" : 								{
+									"destination" : [ "obj-44", 0 ],
+									"disabled" : 0,
+									"hidden" : 0,
+									"source" : [ "obj-61", 0 ]
+								}
+
+							}
+, 							{
+								"patchline" : 								{
+									"destination" : [ "obj-45", 0 ],
+									"disabled" : 0,
+									"hidden" : 0,
+									"source" : [ "obj-61", 0 ]
+								}
+
+							}
+, 							{
+								"patchline" : 								{
 									"destination" : [ "obj-40", 0 ],
 									"disabled" : 0,
 									"hidden" : 0,
@@ -3201,11 +3225,19 @@
 							}
 , 							{
 								"patchline" : 								{
-									"destination" : [ "obj-27", 0 ],
+									"destination" : [ "obj-61", 0 ],
 									"disabled" : 0,
 									"hidden" : 0,
-									"midpoints" : [ 184.5, 152.0, 29.0, 152.0 ],
 									"source" : [ "obj-64", 0 ]
+								}
+
+							}
+, 							{
+								"patchline" : 								{
+									"destination" : [ "obj-61", 0 ],
+									"disabled" : 0,
+									"hidden" : 0,
+									"source" : [ "obj-67", 0 ]
 								}
 
 							}
@@ -3657,6 +3689,15 @@
 			}
 , 			{
 				"patchline" : 				{
+					"destination" : [ "obj-31", 0 ],
+					"disabled" : 0,
+					"hidden" : 0,
+					"source" : [ "obj-1", 2 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
 					"destination" : [ "obj-49", 6 ],
 					"disabled" : 0,
 					"hidden" : 0,
@@ -3885,8 +3926,8 @@
 			}
  ],
 		"dependency_cache" : [ 			{
-				"name" : "oculus.mxo",
-				"type" : "iLaX"
+				"name" : "oculus.mxe",
+				"type" : "iLaF"
 			}
  ],
 		"embedsnapshot" : 0

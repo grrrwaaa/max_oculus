@@ -84,6 +84,9 @@ public:
         
         // configure tracking:
         // in this case, try to use all available tracking capabilites,
+		unsigned int desiredCaps = ovrTrackingCap_Orientation |
+									ovrTrackingCap_MagYawCorrection |
+									ovrTrackingCap_Position;
         // but do not require any to be present for success:
         if (!ovrHmd_ConfigureTracking(hmd, hmd->TrackingCaps, 0)) {
             object_error(&ob, "failed to configure/initiate tracking");
@@ -363,7 +366,7 @@ public:
         }
         
         
-        if (ts.StatusFlags & ovrStatus_PositionConnected) {
+        //if (ts.StatusFlags & ovrStatus_PositionConnected) {
             // this can be zero if the HMD is outside the camera frustum
             // or is facing away from it
             // or partially occluded
@@ -411,7 +414,7 @@ public:
                 
                 outlet_list(outlet_p, 0L, 3, pos);
             }
-        }
+        //}
         
     }
 };
