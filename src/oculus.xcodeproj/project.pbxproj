@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		22CF11AE0EE9A8840054F513 /* oculus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22CF11AD0EE9A8840054F513 /* oculus.cpp */; };
 		36C85BC31936D4CB004516FF /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36C85BC21936D4CB004516FF /* IOKit.framework */; };
-		36C85D471936D511004516FF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36C85D461936D511004516FF /* CoreGraphics.framework */; };
 		36D628CA191380BA003BCA28 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36D628C9191380BA003BCA28 /* OpenGL.framework */; };
 		36D628CC191380DD003BCA28 /* JitterAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36D628CB191380DD003BCA28 /* JitterAPI.framework */; };
 		36D628E3191381DA003BCA28 /* commonsyms.c in Sources */ = {isa = PBXBuildFile; fileRef = 36D628E2191381DA003BCA28 /* commonsyms.c */; };
@@ -142,7 +141,6 @@
 				36D6293B1913853E003BCA28 /* MaxAudioAPI.framework in Frameworks */,
 				36EA83D91913981100441CD7 /* CoreFoundation.framework in Frameworks */,
 				36C85BC31936D4CB004516FF /* IOKit.framework in Frameworks */,
-				36C85D471936D511004516FF /* CoreGraphics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -472,7 +470,7 @@
 					"$(PROJECT_DIR)/LibOVR/Lib/Mac/Release",
 				);
 				OTHER_LDFLAGS = "$(C74_SYM_LINKER_FLAGS)";
-				SDKROOT = macosx10.8;
+				SDKROOT = macosx10.7;
 			};
 			name = Development;
 		};
@@ -501,7 +499,7 @@
 					"$(PROJECT_DIR)/LibOVR/Lib/Mac/Release",
 				);
 				OTHER_LDFLAGS = "$(C74_SYM_LINKER_FLAGS)";
-				SDKROOT = macosx10.8;
+				SDKROOT = macosx10.7;
 			};
 			name = Deployment;
 		};
