@@ -34,6 +34,7 @@ public:
     
     int			fullview;
     double      predict;    // time (in ms) to predict ahead tracking
+	int			warning;	// show H&S warning
     
     // many outlets:
     void *		outlet_q;
@@ -70,6 +71,7 @@ public:
         atom_setfloat(pos+2, 0.f);
         
         fullview = 1;
+		warning = 1;
         
         int hmd_count = ovrHmd_Detect();
         object_post(&ob, "%d HMDs detected", hmd_count);
@@ -402,19 +404,29 @@ public:
             atom_setfloat(quat+2, orient.z);
             atom_setfloat(quat+3, orient.w);
 			
-            if (hswDisplayState.Displayed) {
-                // Dismiss the Health and Safety Warning?
-                // Detect a moderate tap on the side of the HMD.
-                float x = ts.RawSensorData.Accelerometer.x;
-                float y = ts.RawSensorData.Accelerometer.y;
-                float z = ts.RawSensorData.Accelerometer.z;
-                // Arbitrary value and representing moderate tap on the side of the DK2 Rift.
-                if (((x*x)+(y*y)+(z*z)) > 250.f) ovrHmd_DismissHSWDisplay(hmd);
-            }
-            atom_setlong(a, hswDisplayState.Displayed);
-            outlet_anything(outlet_c, ps_warning, 1, a);
-            
+            if (warning) {
+				if (hswDisplayState.Displayed) {
+					// Dismiss the Health and Safety Warning?
+					// Detect a moderate tap on the side of the HMD.
+					float x = ts.RawSensorData.Accelerometer.x;
+					float y = ts.RawSensorData.Accelerometer.y;
+					float z = ts.RawSensorData.Accelerometer.z;
+					// Arbitrary value and representing moderate tap on the side of the DK2 Rift.
+					if (((x*x)+(y*y)+(z*z)) > 250.f) {
+						if (ovrHmd_DismissHSWDisplay(hmd)) {
+							warning = 0;
+							atom_setlong(a, warning);
+							outlet_anything(outlet_c, ps_warning, 1, a);
+						}
+					}
+				} else {
+					warning = 0;
+					atom_setlong(a, warning);
+					outlet_anything(outlet_c, ps_warning, 1, a);
+				}
+			}
 		}
+
 		outlet_list(outlet_q, 0L, 4, quat);
     }
 };
@@ -554,6 +566,9 @@ int C74_EXPORT main(void) {
     CLASS_ATTR_LONG(maxclass, "fullview", 0, t_oculus, fullview);
     CLASS_ATTR_ACCESSORS(maxclass, "fullview", NULL, oculus_fullview_set);
     CLASS_ATTR_STYLE_LABEL(maxclass, "fullview", 0, "onoff", "use default (0) or max (1) field of view");
+
+	CLASS_ATTR_LONG(maxclass, "warning", 0, t_oculus, warning);
+    CLASS_ATTR_STYLE_LABEL(maxclass, "warning", 0, "onoff", "show health & safety warning");
     
     class_register(CLASS_BOX, maxclass); 
     oculus_class = maxclass;
