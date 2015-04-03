@@ -339,18 +339,69 @@ public:
         
         // get tracking state:
         ovrTrackingState ts = ovrHmd_GetTrackingState(hmd, ovr_GetTimeInSeconds() + (predict * 0.001));
-        
+		
+		
+		
+		//if (ts.StatusFlags & ovrStatus_PositionConnected) {
+		// this can be zero if the HMD is outside the camera frustum
+		// or is facing away from it
+		// or partially occluded
+		// or it is moving too fast
+		if (ts.StatusFlags & ovrStatus_PositionTracked) {
+			outlet_int(outlet_p_info, (t_atom_long)1);
+			
+			// TODO
+			// float frustumHorizontalFOV = hmd->CameraFrustumHFovInRadians;
+			// float frustumVerticalFOV = hmd->CameraFrustumVHFovInRadians;
+			// float frustumNear = hmd->CameraFrustumNearZInMeters;
+			// float frustumFar = hmd->CameraFrustumFarZInMeters;
+			
+			// axis system of camera has ZX always parallel to ground (presumably by gravity)
+			// default origin is 1m in front of the camera (in +Z), but at the same height (even if camera is tilted)
+			
+			/*
+			 typedef struct ovrPoseStatef_
+			 {
+			 ovrPosef     ThePose;
+			 ovrVector3f  AngularVelocity;
+			 ovrVector3f  LinearVelocity;
+			 ovrVector3f  AngularAcceleration;
+			 ovrVector3f  LinearAcceleration;
+			 double       TimeInSeconds;         // Absolute time of this state sample.
+			 } ovrPoseStatef;
+			 */
+			
+			const ovrPoseStatef predicted = ts.HeadPose;
+			const ovrVector3f position = predicted.ThePose.Position;
+			
+			atom_setfloat(pos  , position.x);
+			atom_setfloat(pos+1, position.y);
+			atom_setfloat(pos+2, position.z);
+			outlet_list(outlet_p, 0L, 3, pos);
+			
+			// TODO: accessors for these:
+			// CameraPose is the pose of the camera relative to the origin
+			// LeveledCameraPose is the same but with roll & pitch zeroed out
+			
+			
+		} else {
+			outlet_int(outlet_p_info, (t_atom_long)0);
+			// is there some kind of predictive interpolation we can use here?
+			
+			outlet_list(outlet_p, 0L, 3, pos);
+		}
+		//}
+		
         if (ts.StatusFlags & ovrStatus_OrientationTracked) {
-            
+			
             const ovrPoseStatef predicted = ts.HeadPose;
             const ovrQuatf orient = predicted.ThePose.Orientation;
-            
+			
             atom_setfloat(quat  , orient.x);
             atom_setfloat(quat+1, orient.y);
             atom_setfloat(quat+2, orient.z);
             atom_setfloat(quat+3, orient.w);
-            outlet_list(outlet_q, 0L, 4, quat);
-            
+			
             if (hswDisplayState.Displayed) {
                 // Dismiss the Health and Safety Warning?
                 // Detect a moderate tap on the side of the HMD.
@@ -363,59 +414,8 @@ public:
             atom_setlong(a, hswDisplayState.Displayed);
             outlet_anything(outlet_c, ps_warning, 1, a);
             
-        }
-        
-        
-        //if (ts.StatusFlags & ovrStatus_PositionConnected) {
-            // this can be zero if the HMD is outside the camera frustum
-            // or is facing away from it
-            // or partially occluded
-            // or it is moving too fast
-            if (ts.StatusFlags & ovrStatus_PositionTracked) {
-                outlet_int(outlet_p_info, (t_atom_long)1);
-                
-                // TODO
-                // float frustumHorizontalFOV = hmd->CameraFrustumHFovInRadians;
-                // float frustumVerticalFOV = hmd->CameraFrustumVHFovInRadians;
-                // float frustumNear = hmd->CameraFrustumNearZInMeters;
-                // float frustumFar = hmd->CameraFrustumFarZInMeters;
-                
-                // axis system of camera has ZX always parallel to ground (presumably by gravity)
-                // default origin is 1m in front of the camera (in +Z), but at the same height (even if camera is tilted)
-                
-                /*
-                 typedef struct ovrPoseStatef_
-                 {
-                 ovrPosef     ThePose;
-                 ovrVector3f  AngularVelocity;
-                 ovrVector3f  LinearVelocity;
-                 ovrVector3f  AngularAcceleration;
-                 ovrVector3f  LinearAcceleration;
-                 double       TimeInSeconds;         // Absolute time of this state sample.
-                 } ovrPoseStatef;
-                 */
-                
-                const ovrPoseStatef predicted = ts.HeadPose;
-                const ovrVector3f position = predicted.ThePose.Position;
-                
-                atom_setfloat(pos  , position.x);
-                atom_setfloat(pos+1, position.y);
-                atom_setfloat(pos+2, position.z);
-                outlet_list(outlet_p, 0L, 3, pos);
-                
-                // TODO: accessors for these:
-                // CameraPose is the pose of the camera relative to the origin
-                // LeveledCameraPose is the same but with roll & pitch zeroed out
-                
-                
-            } else {
-                outlet_int(outlet_p_info, (t_atom_long)0);
-                // is there some kind of predictive interpolation we can use here?
-                
-                outlet_list(outlet_p, 0L, 3, pos);
-            }
-        //}
-        
+		}
+		outlet_list(outlet_q, 0L, 4, quat);
     }
 };
 
