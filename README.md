@@ -14,12 +14,13 @@ Implemented:
 - Tracking
 	- Orientation tracking (as Jitter-compatible quat)
 	- Position tracking & status
-	- Example integrating HMD tracking with in-world navigation
+	- Example integrating HMD tracking with in-world navigation (WASD + arrow keys)
 
 - Rendering
 	- Output rift distortion parameters, including distortion mesh
 	- Example distortion shaders, including chromatic aberration correction
 	- Example rendered scene
+	- FPS monitoring; press 'f' to show in-world
 
 - Display management
 	- If >1 displays, additional monitor view opens of first display when HMD goes fullscreen, and Rift view opens on Nth display.
