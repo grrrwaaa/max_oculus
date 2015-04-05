@@ -9,7 +9,7 @@
 			"modernui" : 1
 		}
 ,
-		"rect" : [ 577.0, 99.0, 900.0, 492.0 ],
+		"rect" : [ 506.0, 99.0, 900.0, 492.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 10.0,
@@ -3838,7 +3838,7 @@
 							"modernui" : 1
 						}
 ,
-						"rect" : [ 345.0, 270.0, 696.0, 655.0 ],
+						"rect" : [ 386.0, 103.0, 677.0, 613.0 ],
 						"bglocked" : 0,
 						"openinpresentation" : 0,
 						"default_fontsize" : 12.0,
@@ -3872,7 +3872,6 @@
 									"numinlets" : 1,
 									"numoutlets" : 0,
 									"patching_rect" : [ 136.0, 118.5, 228.5, 20.0 ],
-									"presentation_rect" : [ 246.0, 108.5, 0.0, 0.0 ],
 									"style" : "",
 									"text" : "turn this on if oculus is primary display"
 								}
@@ -3908,7 +3907,7 @@
 											"modernui" : 1
 										}
 ,
-										"rect" : [ 327.0, 172.0, 814.0, 525.0 ],
+										"rect" : [ 592.0, 104.0, 814.0, 525.0 ],
 										"bglocked" : 0,
 										"openinpresentation" : 0,
 										"default_fontsize" : 12.0,
@@ -3937,12 +3936,25 @@
 										"subpatcher_template" : "",
 										"boxes" : [ 											{
 												"box" : 												{
+													"id" : "obj-1",
+													"maxclass" : "newobj",
+													"numinlets" : 2,
+													"numoutlets" : 1,
+													"outlettype" : [ "int" ],
+													"patching_rect" : [ 192.0, 390.0, 29.5, 22.0 ],
+													"style" : "",
+													"text" : "- 1"
+												}
+
+											}
+, 											{
+												"box" : 												{
 													"id" : "obj-62",
 													"maxclass" : "newobj",
 													"numinlets" : 2,
 													"numoutlets" : 1,
 													"outlettype" : [ "int" ],
-													"patching_rect" : [ 294.0, 449.0, 29.5, 22.0 ],
+													"patching_rect" : [ 294.0, 453.0, 29.5, 22.0 ],
 													"style" : "",
 													"text" : "> 1"
 												}
@@ -3955,7 +3967,7 @@
 													"maxclass" : "outlet",
 													"numinlets" : 1,
 													"numoutlets" : 0,
-													"patching_rect" : [ 294.0, 480.0, 30.0, 30.0 ],
+													"patching_rect" : [ 294.0, 484.0, 30.0, 30.0 ],
 													"style" : ""
 												}
 
@@ -3967,8 +3979,7 @@
 													"maxclass" : "comment",
 													"numinlets" : 1,
 													"numoutlets" : 0,
-													"patching_rect" : [ 305.0, 207.0, 147.0, 48.0 ],
-													"presentation_rect" : [ 360.0, 219.0, 0.0, 0.0 ],
+													"patching_rect" : [ 305.0, 148.0, 149.0, 47.0 ],
 													"style" : "",
 													"text" : "Assume Nth of N displays (or assume display zero by toggling the gswitch"
 												}
@@ -3981,8 +3992,7 @@
 													"maxclass" : "comment",
 													"numinlets" : 1,
 													"numoutlets" : 0,
-													"patching_rect" : [ 534.0, 156.0, 252.0, 62.0 ],
-													"presentation_rect" : [ 441.0, 166.0, 0.0, 0.0 ],
+													"patching_rect" : [ 534.0, 97.0, 252.0, 60.0 ],
 													"style" : "",
 													"text" : "TODO possible improvement to search for matching resolutions? Trickier because a) could be landscape/portrait and b) second monitor might also be the same res"
 												}
@@ -3996,7 +4006,7 @@
 													"numinlets" : 0,
 													"numoutlets" : 1,
 													"outlettype" : [ "int" ],
-													"patching_rect" : [ 247.0, 140.0, 30.0, 30.0 ],
+													"patching_rect" : [ 247.0, 81.0, 30.0, 30.0 ],
 													"style" : ""
 												}
 
@@ -4008,7 +4018,7 @@
 													"numinlets" : 1,
 													"numoutlets" : 1,
 													"outlettype" : [ "int" ],
-													"patching_rect" : [ 394.0, 389.0, 24.0, 22.0 ],
+													"patching_rect" : [ 394.0, 393.0, 24.0, 22.0 ],
 													"style" : "",
 													"text" : "t 0"
 												}
@@ -4022,7 +4032,7 @@
 													"numoutlets" : 2,
 													"outlettype" : [ "", "" ],
 													"parameter_enable" : 0,
-													"patching_rect" : [ 247.0, 207.0, 39.0, 32.0 ],
+													"patching_rect" : [ 247.0, 148.0, 39.0, 32.0 ],
 													"style" : ""
 												}
 
@@ -4034,7 +4044,7 @@
 													"numinlets" : 1,
 													"numoutlets" : 2,
 													"outlettype" : [ "", "bang" ],
-													"patching_rect" : [ 247.0, 250.0, 30.0, 22.0 ],
+													"patching_rect" : [ 247.0, 191.0, 30.0, 22.0 ],
 													"style" : "",
 													"text" : "t l b"
 												}
@@ -4047,8 +4057,7 @@
 													"numinlets" : 1,
 													"numoutlets" : 1,
 													"outlettype" : [ "bang" ],
-													"patching_rect" : [ 258.0, 294.0, 24.0, 24.0 ],
-													"presentation_rect" : [ 340.0, 126.0, 0.0, 0.0 ],
+													"patching_rect" : [ 258.0, 235.0, 24.0, 24.0 ],
 													"style" : ""
 												}
 
@@ -4060,8 +4069,7 @@
 													"numinlets" : 2,
 													"numoutlets" : 2,
 													"outlettype" : [ "", "" ],
-													"patching_rect" : [ 258.0, 389.0, 71.0, 22.0 ],
-													"presentation_rect" : [ 340.0, 221.0, 0.0, 0.0 ],
+													"patching_rect" : [ 258.0, 330.0, 71.0, 22.0 ],
 													"style" : "",
 													"text" : "route count"
 												}
@@ -4074,8 +4082,7 @@
 													"numinlets" : 1,
 													"numoutlets" : 1,
 													"outlettype" : [ "count" ],
-													"patching_rect" : [ 258.0, 331.0, 47.0, 22.0 ],
-													"presentation_rect" : [ 340.0, 163.0, 0.0, 0.0 ],
+													"patching_rect" : [ 258.0, 272.0, 47.0, 22.0 ],
 													"style" : "",
 													"text" : "t count"
 												}
@@ -4088,8 +4095,7 @@
 													"numinlets" : 1,
 													"numoutlets" : 1,
 													"outlettype" : [ "" ],
-													"patching_rect" : [ 258.0, 361.0, 66.0, 22.0 ],
-													"presentation_rect" : [ 340.0, 193.0, 0.0, 0.0 ],
+													"patching_rect" : [ 258.0, 302.0, 66.0, 22.0 ],
 													"style" : "",
 													"text" : "jit.displays"
 												}
@@ -4103,7 +4109,7 @@
 													"numoutlets" : 2,
 													"outlettype" : [ "", "bang" ],
 													"parameter_enable" : 0,
-													"patching_rect" : [ 20.0, 438.5, 50.0, 22.0 ],
+													"patching_rect" : [ 20.0, 442.5, 50.0, 22.0 ],
 													"style" : ""
 												}
 
@@ -4115,21 +4121,8 @@
 													"maxclass" : "outlet",
 													"numinlets" : 1,
 													"numoutlets" : 0,
-													"patching_rect" : [ 20.0, 474.5, 30.0, 30.0 ],
+													"patching_rect" : [ 20.0, 478.5, 30.0, 30.0 ],
 													"style" : ""
-												}
-
-											}
-, 											{
-												"box" : 												{
-													"id" : "obj-29",
-													"maxclass" : "newobj",
-													"numinlets" : 2,
-													"numoutlets" : 1,
-													"outlettype" : [ "int" ],
-													"patching_rect" : [ 20.0, 299.0, 29.5, 22.0 ],
-													"style" : "",
-													"text" : "+ 1"
 												}
 
 											}
@@ -4140,7 +4133,7 @@
 													"maxclass" : "comment",
 													"numinlets" : 1,
 													"numoutlets" : 0,
-													"patching_rect" : [ 60.0, 219.0, 61.0, 62.0 ],
+													"patching_rect" : [ 60.0, 160.0, 61.0, 60.0 ],
 													"style" : "",
 													"text" : "OSX only: use the DisplayId"
 												}
@@ -4153,7 +4146,7 @@
 													"numinlets" : 1,
 													"numoutlets" : 2,
 													"outlettype" : [ "int", "int" ],
-													"patching_rect" : [ 35.0, 176.0, 29.5, 22.0 ],
+													"patching_rect" : [ 35.0, 117.0, 29.5, 22.0 ],
 													"style" : "",
 													"text" : "t i i"
 												}
@@ -4166,7 +4159,7 @@
 													"numinlets" : 2,
 													"numoutlets" : 1,
 													"outlettype" : [ "" ],
-													"patching_rect" : [ 20.0, 253.0, 34.0, 22.0 ],
+													"patching_rect" : [ 20.0, 194.0, 34.0, 22.0 ],
 													"style" : "",
 													"text" : "gate"
 												}
@@ -4179,7 +4172,7 @@
 													"numinlets" : 2,
 													"numoutlets" : 1,
 													"outlettype" : [ "int" ],
-													"patching_rect" : [ 20.0, 219.0, 35.0, 22.0 ],
+													"patching_rect" : [ 20.0, 160.0, 35.0, 22.0 ],
 													"style" : "",
 													"text" : ">= 0"
 												}
@@ -4192,7 +4185,7 @@
 													"numinlets" : 2,
 													"numoutlets" : 2,
 													"outlettype" : [ "", "" ],
-													"patching_rect" : [ 35.0, 140.0, 91.0, 22.0 ],
+													"patching_rect" : [ 35.0, 81.0, 91.0, 22.0 ],
 													"style" : "",
 													"text" : "route DisplayId"
 												}
@@ -4208,7 +4201,7 @@
 													"numinlets" : 0,
 													"numoutlets" : 1,
 													"outlettype" : [ "" ],
-													"patching_rect" : [ 35.0, 110.0, 75.0, 21.0 ],
+													"patching_rect" : [ 35.0, 51.0, 75.0, 21.0 ],
 													"style" : "",
 													"text" : "r oculus_info"
 												}
@@ -4220,7 +4213,7 @@
 													"maxclass" : "comment",
 													"numinlets" : 1,
 													"numoutlets" : 0,
-													"patching_rect" : [ 20.0, 15.0, 252.0, 20.0 ],
+													"patching_rect" : [ 20.0, 18.0, 252.0, 20.0 ],
 													"style" : "",
 													"text" : "guess which display is the HMD..."
 												}
@@ -4228,6 +4221,15 @@
 											}
  ],
 										"lines" : [ 											{
+												"patchline" : 												{
+													"destination" : [ "obj-41", 0 ],
+													"disabled" : 0,
+													"hidden" : 0,
+													"source" : [ "obj-1", 0 ]
+												}
+
+											}
+, 											{
 												"patchline" : 												{
 													"destination" : [ "obj-25", 0 ],
 													"disabled" : 0,
@@ -4256,7 +4258,7 @@
 											}
 , 											{
 												"patchline" : 												{
-													"destination" : [ "obj-29", 0 ],
+													"destination" : [ "obj-41", 0 ],
 													"disabled" : 0,
 													"hidden" : 0,
 													"source" : [ "obj-22", 0 ]
@@ -4292,15 +4294,6 @@
 											}
 , 											{
 												"patchline" : 												{
-													"destination" : [ "obj-41", 0 ],
-													"disabled" : 0,
-													"hidden" : 0,
-													"source" : [ "obj-29", 0 ]
-												}
-
-											}
-, 											{
-												"patchline" : 												{
 													"destination" : [ "obj-30", 0 ],
 													"disabled" : 0,
 													"hidden" : 0,
@@ -4319,7 +4312,7 @@
 											}
 , 											{
 												"patchline" : 												{
-													"destination" : [ "obj-41", 0 ],
+													"destination" : [ "obj-1", 0 ],
 													"disabled" : 0,
 													"hidden" : 0,
 													"source" : [ "obj-45", 0 ]
@@ -4411,7 +4404,6 @@
 									}
 ,
 									"patching_rect" : [ 107.0, 143.0, 82.0, 22.0 ],
-									"presentation_rect" : [ 208.0, 118.5, 0.0, 0.0 ],
 									"saved_object_attributes" : 									{
 										"description" : "",
 										"digest" : "",
@@ -4650,7 +4642,7 @@
 									"maxclass" : "comment",
 									"numinlets" : 1,
 									"numoutlets" : 0,
-									"patching_rect" : [ 88.0, 51.0, 603.0, 34.0 ],
+									"patching_rect" : [ 88.0, 51.0, 603.0, 33.0 ],
 									"style" : "",
 									"text" : "this subpatcher will try to guess the right behavior to use for multi-display setups: placing the fullscreen view onto the HMD, the non-fullscreen view onto the first display"
 								}
@@ -4724,7 +4716,7 @@
 									"maxclass" : "comment",
 									"numinlets" : 1,
 									"numoutlets" : 0,
-									"patching_rect" : [ 142.0, 460.0, 150.0, 34.0 ],
+									"patching_rect" : [ 142.0, 460.0, 150.0, 33.0 ],
 									"style" : "",
 									"text" : "move to oculus display when in fullscreen"
 								}
@@ -5374,7 +5366,7 @@
 									"maxclass" : "comment",
 									"numinlets" : 1,
 									"numoutlets" : 0,
-									"patching_rect" : [ 435.0, 270.0, 72.0, 62.0 ],
+									"patching_rect" : [ 435.0, 270.0, 72.0, 60.0 ],
 									"style" : "",
 									"text" : "DK2 in portrait mode in Windows"
 								}
@@ -10814,8 +10806,8 @@
 			}
  ],
 		"dependency_cache" : [ 			{
-				"name" : "oculus.mxe",
-				"type" : "iLaF"
+				"name" : "oculus.mxo",
+				"type" : "iLaX"
 			}
  ],
 		"embedsnapshot" : 0
