@@ -78,7 +78,7 @@ public:
 		lowpersistence = 0;
 		dynamicprediction = 0;
 		
-		unsigned int caps = 0;
+		unsigned int hmdCaps = 0;
         int hmd_count = ovrHmd_Detect();
 		if (hmd_count <= 0) {
 			object_warn(&ob, "no HMD detected");
@@ -89,12 +89,12 @@ public:
 			if (!hmd) {
 				object_warn(&ob, "failed to create HMD instance");
 			} else {
-				caps = ovrHmd_GetEnabledCaps(hmd);
-				if (!(caps & ovrHmdCap_Available)) {
+				hmdCaps = ovrHmd_GetEnabledCaps(hmd);
+				if (!(hmdCaps & ovrHmdCap_Available)) {
 					object_error(&ob, "HMD in use by another application");
 					ovrHmd_Destroy(hmd);
 					hmd = 0;
-				} else if (!(caps & ovrHmdCap_ExtendDesktop)) {
+				} else if (!(hmdCaps & ovrHmdCap_ExtendDesktop)) {
 					object_error(&ob, "Please switch the Oculus Rift driver to extended desktop mode");
 					ovrHmd_Destroy(hmd);
 					hmd = 0;
@@ -138,6 +138,9 @@ public:
 		if (lowpersistence) hmdCaps |= ovrHmdCap_LowPersistence;
 		if (dynamicprediction) hmdCaps |= ovrHmdCap_DynamicPrediction;
 		ovrHmd_SetEnabledCaps(hmd, hmdCaps);
+		hmdCaps = ovrHmd_GetEnabledCaps(hmd);
+		lowpersistence = (hmdCaps & ovrHmdCap_LowPersistence) ? 1: 0;
+		dynamicprediction = (hmdCaps & ovrHmdCap_DynamicPrediction) ? 1 : 0;
 		
 		/*
 		 ovrHmdCap_DisplayOff        = 0x0040,   /// Turns off HMD screen and output (only if 'ExtendDesktop' is off).
@@ -188,17 +191,21 @@ public:
         atom_setfloat(a, hmd->CameraFrustumFarZInMeters);
         outlet_anything(outlet_c, gensym("CameraFrustumFarZInMeters"), 1, a);
         
+        atom_setlong(a, hmd->Resolution.w);
+        atom_setlong(a+1, hmd->Resolution.h);
+        outlet_anything(outlet_c, gensym("Resolution"), 2, a);
         atom_setsym(a, gensym(hmd->DisplayDeviceName));
         outlet_anything(outlet_c, gensym("DisplayDeviceName"), 1, a);
         atom_setlong(a, hmd->DisplayId);
         outlet_anything(outlet_c, gensym("DisplayId"), 1, a);
-        atom_setlong(a, hmd->Resolution.w);
-        atom_setlong(a+1, hmd->Resolution.h);
-        outlet_anything(outlet_c, gensym("Resolution"), 2, a);
         
         atom_setlong(a, hmd->EyeRenderOrder[0]);
         outlet_anything(outlet_c, gensym("EyeRenderOrder"), 1, a);
-		
+
+        atom_setlong(a, hmdCaps & lowpersistence);
+        outlet_anything(outlet_c, gensym("lowpersistence"), 1, a);
+        atom_setlong(a, hmdCaps & dynamicprediction);
+        outlet_anything(outlet_c, gensym("dynamicprediction"), 1, a);
 		
         
         // now configure per eye:
@@ -372,6 +379,9 @@ public:
         // Health and Safety Warning display state.
         ovrHSWDisplayState hswDisplayState;
         ovrHmd_GetHSWDisplayState(hmd, &hswDisplayState);
+
+		//frameTiming = ovrHmd_BeginFrameTiming(hmd, 0); 
+		//ovrTrackingState ts = ovrHmd_GetTrackingState(hmd, frameTiming.ScanoutMidpointSeconds);
         
         // get tracking state:
         ovrTrackingState ts = ovrHmd_GetTrackingState(hmd, ovr_GetTimeInSeconds() + (predict * 0.001));
