@@ -30,23 +30,26 @@ static t_symbol * ps_warning;
 
 class t_oculus {
 public:
-    t_object	ob;			// the object itself (must be first)
-    
+	t_object	ob;			// the object itself (must be first)
+	
+	// the quaternion orientation of the HMD:
+	t_atom		quat[4];
+	t_atom		pos[3];
+	
+	// many outlets:
+	void *		outlet_q;
+	void *		outlet_p;
+	void *		outlet_p_info;
+	void *		outlet_eye[2];
+	void *		outlet_mesh[2];
+	void *		outlet_c;
+	
+	// attrs:
     int			fullview;
     double      predict;    // time (in ms) to predict ahead tracking
 	int			warning;	// show H&S warning
-    
-    // many outlets:
-    void *		outlet_q;
-    void *		outlet_p;
-    void *		outlet_p_info;
-    void *		outlet_eye[2];
-    void *		outlet_mesh[2];
-    void *		outlet_c;
-    
-    // the quaternion orientation of the HMD:
-    t_atom		quat[4];
-    t_atom		pos[3];
+	int			lowpersistence;
+	int			dynamicprediction;
     
     // LibOVR objects:
     ovrHmd		hmd;
@@ -72,23 +75,44 @@ public:
         
         fullview = 1;
 		warning = 1;
-        
+		lowpersistence = 0;
+		dynamicprediction = 0;
+		
+		unsigned int caps = 0;
         int hmd_count = ovrHmd_Detect();
-        object_post(&ob, "%d HMDs detected", hmd_count);
-        if (hmd_count > 0 && index < hmd_count) {
-            hmd = ovrHmd_Create(index);
-        }
-        hmd = ovrHmd_Create(index);
+		if (hmd_count <= 0) {
+			object_warn(&ob, "no HMD detected");
+		} else if (index >= hmd_count) {
+			object_warn(&ob, "request for HMD %d out of range (only %d devices available)", index, hmd_count);
+		} else {
+			hmd = ovrHmd_Create(index);
+			if (!hmd) {
+				object_warn(&ob, "failed to create HMD instance");
+			} else {
+				caps = ovrHmd_GetEnabledCaps(hmd);
+				if (!(caps & ovrHmdCap_Available)) {
+					object_error(&ob, "HMD in use by another application");
+					ovrHmd_Destroy(hmd);
+					hmd = 0;
+				} else if (!(caps & ovrHmdCap_ExtendDesktop)) {
+					object_error(&ob, "Please switch the Oculus Rift driver to extended desktop mode");
+					ovrHmd_Destroy(hmd);
+					hmd = 0;
+				}
+			}
+		}
+		
         if (hmd == 0) {
-            object_warn(&ob, "LibOVR: HMD not detected, using offline DK2 simulator instead");
+            object_warn(&ob, "HMD not acquired, using offline DK2 simulator instead");
             hmd = ovrHmd_CreateDebug(ovrHmd_DK2);
-        }
-        
+		}
+		
         // configure tracking:
         // in this case, try to use all available tracking capabilites,
 		unsigned int desiredCaps = ovrTrackingCap_Orientation |
 									ovrTrackingCap_MagYawCorrection |
 									ovrTrackingCap_Position;
+		
         // but do not require any to be present for success:
         if (!ovrHmd_ConfigureTracking(hmd, hmd->TrackingCaps, 0)) {
             object_error(&ob, "failed to configure/initiate tracking");
@@ -109,7 +133,22 @@ public:
             object_warn(&ob, "No HMD to configure");
             return;
         }
-        
+		
+		unsigned int hmdCaps = 0;
+		if (lowpersistence) hmdCaps |= ovrHmdCap_LowPersistence;
+		if (dynamicprediction) hmdCaps |= ovrHmdCap_DynamicPrediction;
+		ovrHmd_SetEnabledCaps(hmd, hmdCaps);
+		
+		/*
+		 ovrHmdCap_DisplayOff        = 0x0040,   /// Turns off HMD screen and output (only if 'ExtendDesktop' is off).
+		 
+		 ovrHmdCap_LowPersistence    = 0x0080,   /// HMD supports low persistence mode.
+		 ovrHmdCap_DynamicPrediction = 0x0200,   /// Adjust prediction dynamically based on internally measured latency.
+		 ovrHmdCap_DirectPentile     = 0x0400,   /// Write directly in pentile color mapping format
+		 ovrHmdCap_NoVSync           = 0x1000,   /// Support rendering without VSync for debugging.
+		 
+		 */
+		
         // note serial:
         atom_setsym(a, gensym(hmd->SerialNumber));
         outlet_anything(outlet_c, gensym("serial"), 1, a);
@@ -159,13 +198,8 @@ public:
         
         atom_setlong(a, hmd->EyeRenderOrder[0]);
         outlet_anything(outlet_c, gensym("EyeRenderOrder"), 1, a);
-        
-        
-        // capabilities:
-        //hmd->HmdCaps
-        //hmd->SensorCaps
-        //hmd->DistortionCaps
-        // hmd->EyeRenderOrder
+		
+		
         
         // now configure per eye:
         for ( int eyeNum = 0; eyeNum < 2; eyeNum++ ) {
@@ -469,6 +503,20 @@ t_max_err oculus_fullview_set(t_oculus *x, t_object *attr, long argc, t_atom *ar
     return 0;
 }
 
+t_max_err oculus_lowpersistence_set(t_oculus *x, t_object *attr, long argc, t_atom *argv) {
+	x->lowpersistence = atom_getlong(argv);
+	
+	oculus_configure(x);
+	return 0;
+}
+
+t_max_err oculus_dynamicprediction_set(t_oculus *x, t_object *attr, long argc, t_atom *argv) {
+	x->dynamicprediction = atom_getlong(argv);
+	
+	oculus_configure(x);
+	return 0;
+}
+
 void oculus_assist(t_oculus *x, void *b, long m, long a, char *s)
 {
     if (m == ASSIST_INLET) { // inlet
@@ -563,9 +611,18 @@ int C74_EXPORT main(void) {
     class_addmethod(maxclass, (method)oculus_configure, "configure", 0);
     
     CLASS_ATTR_FLOAT(maxclass, "predict", 0, t_oculus, predict);
+	
     CLASS_ATTR_LONG(maxclass, "fullview", 0, t_oculus, fullview);
-    CLASS_ATTR_ACCESSORS(maxclass, "fullview", NULL, oculus_fullview_set);
+	CLASS_ATTR_ACCESSORS(maxclass, "fullview", NULL, oculus_fullview_set);
     CLASS_ATTR_STYLE_LABEL(maxclass, "fullview", 0, "onoff", "use default (0) or max (1) field of view");
+	
+	CLASS_ATTR_LONG(maxclass, "lowpersistence", 0, t_oculus, lowpersistence);
+	CLASS_ATTR_ACCESSORS(maxclass, "lowpersistence", NULL, oculus_lowpersistence_set);
+	CLASS_ATTR_STYLE_LABEL(maxclass, "lowpersistence", 0, "onoff", "enable low persistence mode (may reduce judder)");
+	
+	CLASS_ATTR_LONG(maxclass, "dynamicprediction", 0, t_oculus, dynamicprediction);
+	CLASS_ATTR_ACCESSORS(maxclass, "dynamicprediction", NULL, oculus_dynamicprediction_set);
+	CLASS_ATTR_STYLE_LABEL(maxclass, "dynamicprediction", 0, "onoff", "enable dynamic prediction (may improve tracking)");
 
 	CLASS_ATTR_LONG(maxclass, "warning", 0, t_oculus, warning);
     CLASS_ATTR_STYLE_LABEL(maxclass, "warning", 0, "onoff", "show health & safety warning");
