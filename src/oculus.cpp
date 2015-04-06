@@ -381,8 +381,8 @@ public:
         ovrHSWDisplayState hswDisplayState;
         ovrHmd_GetHSWDisplayState(hmd, &hswDisplayState);
 
-		//frameTiming = ovrHmd_BeginFrameTiming(hmd, 0); 
-		//ovrTrackingState ts = ovrHmd_GetTrackingState(hmd, frameTiming.ScanoutMidpointSeconds);
+		//frameTiming t = ovrHmd_BeginFrameTiming(hmd, 0); 
+		//ovrTrackingState ts = ovrHmd_GetTrackingState(hmd, t.ScanoutMidpointSeconds);
         
         // get tracking state:
         ovrTrackingState ts = ovrHmd_GetTrackingState(hmd, ovr_GetTimeInSeconds() + (predict * 0.001));
