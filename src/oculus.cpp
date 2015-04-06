@@ -75,7 +75,7 @@ public:
         
         fullview = 1;
 		warning = 1;
-		lowpersistence = 0;
+		lowpersistence = 1;
 		dynamicprediction = 0;
 		
 		unsigned int hmdCaps = 0;
@@ -90,15 +90,16 @@ public:
 				object_warn(&ob, "failed to create HMD instance");
 			} else {
 				hmdCaps = ovrHmd_GetEnabledCaps(hmd);
-				if (!(hmdCaps & ovrHmdCap_Available)) {
-					object_error(&ob, "HMD in use by another application");
-					ovrHmd_Destroy(hmd);
-					hmd = 0;
-				} else if (!(hmdCaps & ovrHmdCap_ExtendDesktop)) {
-					object_error(&ob, "Please switch the Oculus Rift driver to extended desktop mode");
-					ovrHmd_Destroy(hmd);
-					hmd = 0;
-				}
+				//if (!(hmdCaps & ovrHmdCap_Available)) {
+				//	object_error(&ob, "HMD in use by another application");
+				//	ovrHmd_Destroy(hmd);
+				//	hmd = 0;
+				//} else 
+				//if (!(hmdCaps & ovrHmdCap_ExtendDesktop)) {
+				//	object_error(&ob, "Please switch the Oculus Rift driver to extended desktop mode");
+				//	ovrHmd_Destroy(hmd);
+				//	hmd = 0;
+				//}
 			}
 		}
 		
