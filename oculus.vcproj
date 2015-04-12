@@ -20,7 +20,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;..\..\..\c74support\max-includes\max_extern_common.vsprops;..\..\..\c74support\max-includes\max_extern_x86.vsprops"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;..\..\..\MaxSDK-6.1.4\c74support\max-includes\max_extern_common.vsprops;..\..\..\MaxSDK-6.1.4\c74support\max-includes\max_extern_x86.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -124,7 +124,7 @@
 		<Configuration
 			Name="Debug|x64"
 			ConfigurationType="2"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;..\..\..\c74support\max-includes\max_extern_common.vsprops;..\..\..\c74support\max-includes\max_extern_x64.vsprops"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;..\..\..\MaxSDK-6.1.4\c74support\max-includes\max_extern_common.vsprops;..\..\..\MaxSDK-6.1.4\c74support\max-includes\max_extern_x64.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -228,7 +228,7 @@
 		<Configuration
 			Name="Release|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;..\..\..\c74support\max-includes\max_extern_common.vsprops;..\..\..\c74support\max-includes\max_extern_x86.vsprops"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;..\..\..\MaxSDK-6.1.4\c74support\max-includes\max_extern_common.vsprops;..\..\..\MaxSDK-6.1.4\c74support\max-includes\max_extern_x86.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -339,7 +339,7 @@
 		<Configuration
 			Name="Release|x64"
 			ConfigurationType="2"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;..\..\..\c74support\max-includes\max_extern_common.vsprops;..\..\..\c74support\max-includes\max_extern_x64.vsprops"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;..\..\..\MaxSDK-6.1.4\c74support\max-includes\max_extern_common.vsprops;..\..\..\MaxSDK-6.1.4\c74support\max-includes\max_extern_x64.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"

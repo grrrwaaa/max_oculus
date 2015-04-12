@@ -53,26 +53,26 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
-    <Import Project="..\..\..\c74support\max-includes\max_extern_common.props" />
-    <Import Project="..\..\..\c74support\max-includes\max_extern_x86.props" />
+    <Import Project="..\..\..\MaxSDK-6.1.4\c74support\max-includes\max_extern_common.props" />
+    <Import Project="..\..\..\MaxSDK-6.1.4\c74support\max-includes\max_extern_x86.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
-    <Import Project="..\..\..\c74support\max-includes\max_extern_common.props" />
-    <Import Project="..\..\..\c74support\max-includes\max_extern_x86.props" />
+    <Import Project="..\..\..\MaxSDK-6.1.4\c74support\max-includes\max_extern_common.props" />
+    <Import Project="..\..\..\MaxSDK-6.1.4\c74support\max-includes\max_extern_x86.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
-    <Import Project="..\..\..\c74support\max-includes\max_extern_common.props" />
-    <Import Project="..\..\..\c74support\max-includes\max_extern_x64.props" />
+    <Import Project="..\..\..\MaxSDK-6.1.4\c74support\max-includes\max_extern_common.props" />
+    <Import Project="..\..\..\MaxSDK-6.1.4\c74support\max-includes\max_extern_x64.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
-    <Import Project="..\..\..\c74support\max-includes\max_extern_common.props" />
-    <Import Project="..\..\..\c74support\max-includes\max_extern_x64.props" />
+    <Import Project="..\..\..\MaxSDK-6.1.4\c74support\max-includes\max_extern_common.props" />
+    <Import Project="..\..\..\MaxSDK-6.1.4\c74support\max-includes\max_extern_x64.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
@@ -268,7 +268,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="$(C74SUPPORT)\max-includes\common\dllmain_win.c" />
-    <ClCompile Include="..\..\..\c74support\max-includes\common\commonsyms.c" />
+    <ClCompile Include="..\..\..\MaxSDK-6.1.4\c74support\max-includes\common\commonsyms.c" />
     <ClCompile Include="oculus.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
