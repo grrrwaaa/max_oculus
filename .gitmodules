@@ -1,0 +1,4 @@
+[submodule "source"]
+	path = source
+	url = git@github.com:grrrwaaa/max_oculus.git
+	branch = master

@@ -1,0 +1,11 @@
+{
+  "oculus": {
+    "category": [
+      "Oculus",
+      "Jitter",
+      "Devices"
+    ],
+    "digest": "Oculus provides a full interface to the Oculus Rift head-mounted display.",
+    "module": "jitter"
+  }
+}

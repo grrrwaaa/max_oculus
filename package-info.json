@@ -1,0 +1,16 @@
+{
+    "name": "grrr",
+    "type": "package",
+    "author": "Graham Wakefield",
+	"description": "A package of externals, abstractions and other additions to Cycling '74 Max, mostly oriented toward generative responsive mixed realities.",
+	"version": "0.0",
+    "major_version": "0",
+    "minor_version": "0",
+    "min_max_version": "612",
+    "website": "https://github.com/grrrwaaa/grrr.package/",
+    "link_mac32": "None",
+    "link_mac64": "None",
+    "link_win32": "None",
+    "link_win64": "None",
+    "alert_text": "None"
+}

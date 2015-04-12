@@ -1,4 +1,0 @@
-LIBRARY oculus.mxe
-
-EXPORTS
-	main
