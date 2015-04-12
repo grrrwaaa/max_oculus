@@ -18,17 +18,21 @@ Currently supports Oculus Developer Kit 2. Probably also works with Developer Ki
 
 Oculus development in general requires a powerful GPU; integrated cards are unlikely to be sufficient.
 
+*Note that an Oculus HMD is not required to be present to work with the external; an offline simulator will be used when an HMD is not attached.*
+
 ## Installation & setup
 
-Install the LibOVR 0.4.4 runtime/driver from [Oculus](https://developer.oculus.com/downloads/#version=pc-0.4.4-beta). Later versions of the runtime *might* work. 
+- Install the LibOVR 0.4.4 runtime/driver from [Oculus](https://developer.oculus.com/downloads/#version=pc-0.4.4-beta). Later versions of the runtime *might* work. 
 
-Once installed, run the configuration utility to configure the device for your system. 
+- Once installed, run the configuration utility to configure the device for your system. 
 
-Make sure that the runtime is set to 'extended mode'. Direct-to-HMD mode cannot not currently be used (see notes below).
+- Make sure that the runtime is set to 'extended mode'. Direct-to-HMD mode cannot not currently be used (see notes below).
 
-Download the repository directory and unzip into ```Documents/Max 7/Packages``` (OSX) or ```My Documents/Max 7/Packages``` (Windows).
+- Configure display refresh rates to prevent judder (see notes below).
 
-Restart Max, and open the ```help/oculus.maxhelp``` to check that it is functioning correctly.
+- Download the repository directory and unzip into ```Documents/Max 7/Packages``` (OSX) or ```My Documents/Max 7/Packages``` (Windows).
+
+- Restart Max, and open the ```help/oculus.maxhelp``` to check that it is functioning correctly.
 
 ## Supported features
 
