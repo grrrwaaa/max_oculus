@@ -55,24 +55,28 @@
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
     <Import Project="..\..\..\MaxSDK-6.1.4\c74support\max-includes\max_extern_common.props" />
     <Import Project="..\..\..\MaxSDK-6.1.4\c74support\max-includes\max_extern_x86.props" />
+    <Import Project="oculus.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
     <Import Project="..\..\..\MaxSDK-6.1.4\c74support\max-includes\max_extern_common.props" />
     <Import Project="..\..\..\MaxSDK-6.1.4\c74support\max-includes\max_extern_x86.props" />
+    <Import Project="oculus.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
     <Import Project="..\..\..\MaxSDK-6.1.4\c74support\max-includes\max_extern_common.props" />
     <Import Project="..\..\..\MaxSDK-6.1.4\c74support\max-includes\max_extern_x64.props" />
+    <Import Project="oculus.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
     <Import Project="..\..\..\MaxSDK-6.1.4\c74support\max-includes\max_extern_common.props" />
     <Import Project="..\..\..\MaxSDK-6.1.4\c74support\max-includes\max_extern_x64.props" />
+    <Import Project="oculus.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
@@ -217,7 +221,7 @@
       <DataExecutionPrevention />
       <ImportLibrary>$(IntDir)$(ProjectName).lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>LibOVR\Lib\Win32\VS2010;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>LibOVR\Lib\Win32\VS2010;..\..\..\MaxSDK-6.1.4\c74support\max-includes;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>MaxAPI.lib;MaxAudio.lib;jitlib.lib;libovr.lib;winmm.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
