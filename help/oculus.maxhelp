@@ -4,12 +4,12 @@
 		"appversion" : 		{
 			"major" : 7,
 			"minor" : 0,
-			"revision" : 2,
+			"revision" : 3,
 			"architecture" : "x86",
 			"modernui" : 1
 		}
 ,
-		"rect" : [ 42.0, 95.0, 940.0, 484.0 ],
+		"rect" : [ 431.0, 80.0, 918.0, 506.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 10.0,
@@ -48,7 +48,7 @@
 						"appversion" : 						{
 							"major" : 7,
 							"minor" : 0,
-							"revision" : 2,
+							"revision" : 3,
 							"architecture" : "x86",
 							"modernui" : 1
 						}
@@ -276,7 +276,7 @@
 						"appversion" : 						{
 							"major" : 7,
 							"minor" : 0,
-							"revision" : 2,
+							"revision" : 3,
 							"architecture" : "x86",
 							"modernui" : 1
 						}
@@ -359,7 +359,7 @@
 										"appversion" : 										{
 											"major" : 7,
 											"minor" : 0,
-											"revision" : 2,
+											"revision" : 3,
 											"architecture" : "x86",
 											"modernui" : 1
 										}
@@ -872,7 +872,7 @@
  ]
 					}
 ,
-					"patching_rect" : [ 60.0, 378.0, 101.0, 21.0 ],
+					"patching_rect" : [ 60.0, 405.0, 101.0, 21.0 ],
 					"saved_object_attributes" : 					{
 						"description" : "",
 						"digest" : "",
@@ -971,7 +971,7 @@
 						"appversion" : 						{
 							"major" : 7,
 							"minor" : 0,
-							"revision" : 2,
+							"revision" : 3,
 							"architecture" : "x86",
 							"modernui" : 1
 						}
@@ -1005,11 +1005,53 @@
 						"subpatcher_template" : "",
 						"boxes" : [ 							{
 								"box" : 								{
+									"id" : "obj-17",
+									"linecount" : 2,
+									"maxclass" : "comment",
+									"numinlets" : 1,
+									"numoutlets" : 0,
+									"patching_rect" : [ 374.0, 346.0, 368.0, 33.0 ],
+									"presentation_rect" : [ 374.0, 346.0, 0.0, 0.0 ],
+									"style" : "",
+									"text" : "you could use the 'feet_node' anim to parent a model of the person, for example."
+								}
+
+							}
+, 							{
+								"box" : 								{
+									"id" : "obj-16",
+									"linecount" : 2,
+									"maxclass" : "comment",
+									"numinlets" : 1,
+									"numoutlets" : 0,
+									"patching_rect" : [ 380.333496, 588.0, 300.0, 33.0 ],
+									"presentation_rect" : [ 380.333496, 602.0, 0.0, 0.0 ],
+									"style" : "",
+									"text" : "position and orientation of head (parent to the jit.gl.camera nodes for each eye)"
+								}
+
+							}
+, 							{
+								"box" : 								{
+									"id" : "obj-14",
+									"linecount" : 2,
+									"maxclass" : "comment",
+									"numinlets" : 1,
+									"numoutlets" : 0,
+									"patching_rect" : [ 307.333496, 666.0, 341.0, 33.0 ],
+									"presentation_rect" : [ 320.333496, 671.0, 0.0, 0.0 ],
+									"style" : "",
+									"text" : "output position and orientation of view as max messages \"position\" and \"quat\""
+								}
+
+							}
+, 							{
+								"box" : 								{
 									"id" : "obj-15",
 									"maxclass" : "comment",
 									"numinlets" : 1,
 									"numoutlets" : 0,
-									"patching_rect" : [ 430.0, 155.0, 150.0, 20.0 ],
+									"patching_rect" : [ 430.0, 153.0, 150.0, 20.0 ],
 									"style" : "",
 									"text" : "wasd and arrow keys"
 								}
@@ -1216,7 +1258,7 @@
 									"maxclass" : "comment",
 									"numinlets" : 1,
 									"numoutlets" : 0,
-									"patching_rect" : [ 475.0, 481.0, 195.0, 20.0 ],
+									"patching_rect" : [ 380.333496, 459.0, 195.0, 20.0 ],
 									"style" : "",
 									"text" : "position of head above ground"
 								}
@@ -1310,7 +1352,7 @@
 										"appversion" : 										{
 											"major" : 7,
 											"minor" : 0,
-											"revision" : 2,
+											"revision" : 3,
 											"architecture" : "x86",
 											"modernui" : 1
 										}
@@ -1560,7 +1602,7 @@
 														"appversion" : 														{
 															"major" : 7,
 															"minor" : 0,
-															"revision" : 2,
+															"revision" : 3,
 															"architecture" : "x86",
 															"modernui" : 1
 														}
@@ -1885,7 +1927,7 @@
 														"appversion" : 														{
 															"major" : 7,
 															"minor" : 0,
-															"revision" : 2,
+															"revision" : 3,
 															"architecture" : "x86",
 															"modernui" : 1
 														}
@@ -2210,7 +2252,7 @@
 														"appversion" : 														{
 															"major" : 7,
 															"minor" : 0,
-															"revision" : 2,
+															"revision" : 3,
 															"architecture" : "x86",
 															"modernui" : 1
 														}
@@ -2535,7 +2577,7 @@
 														"appversion" : 														{
 															"major" : 7,
 															"minor" : 0,
-															"revision" : 2,
+															"revision" : 3,
 															"architecture" : "x86",
 															"modernui" : 1
 														}
@@ -2860,7 +2902,7 @@
 														"appversion" : 														{
 															"major" : 7,
 															"minor" : 0,
-															"revision" : 2,
+															"revision" : 3,
 															"architecture" : "x86",
 															"modernui" : 1
 														}
@@ -3965,7 +4007,7 @@
  ]
 					}
 ,
-					"patching_rect" : [ 303.0, 449.0, 161.400009, 21.0 ],
+					"patching_rect" : [ 303.0, 449.0, 161.400024, 21.0 ],
 					"saved_object_attributes" : 					{
 						"description" : "",
 						"digest" : "",
@@ -3975,7 +4017,7 @@
 					}
 ,
 					"style" : "",
-					"text" : "p navigation"
+					"text" : "p walking_navigation"
 				}
 
 			}
@@ -4003,7 +4045,7 @@
 						"appversion" : 						{
 							"major" : 7,
 							"minor" : 0,
-							"revision" : 2,
+							"revision" : 3,
 							"architecture" : "x86",
 							"modernui" : 1
 						}
@@ -4072,7 +4114,7 @@
 										"appversion" : 										{
 											"major" : 7,
 											"minor" : 0,
-											"revision" : 2,
+											"revision" : 3,
 											"architecture" : "x86",
 											"modernui" : 1
 										}
@@ -4598,7 +4640,7 @@
 										"appversion" : 										{
 											"major" : 7,
 											"minor" : 0,
-											"revision" : 2,
+											"revision" : 3,
 											"architecture" : "x86",
 											"modernui" : 1
 										}
@@ -4978,7 +5020,7 @@
 									"outlettype" : [ "" ],
 									"patching_rect" : [ 41.0, 394.0, 85.0, 22.0 ],
 									"style" : "",
-									"text" : "1024 0"
+									"text" : "0 0"
 								}
 
 							}
@@ -5022,7 +5064,7 @@
 										"appversion" : 										{
 											"major" : 7,
 											"minor" : 0,
-											"revision" : 2,
+											"revision" : 3,
 											"architecture" : "x86",
 											"modernui" : 1
 										}
@@ -5156,7 +5198,7 @@
 										"appversion" : 										{
 											"major" : 7,
 											"minor" : 0,
-											"revision" : 2,
+											"revision" : 3,
 											"architecture" : "x86",
 											"modernui" : 1
 										}
@@ -5872,7 +5914,7 @@
  ]
 					}
 ,
-					"patching_rect" : [ 18.0, 349.0, 103.0, 21.0 ],
+					"patching_rect" : [ 18.0, 376.0, 103.0, 21.0 ],
 					"saved_object_attributes" : 					{
 						"description" : "",
 						"digest" : "",
@@ -5898,7 +5940,7 @@
 						"appversion" : 						{
 							"major" : 7,
 							"minor" : 0,
-							"revision" : 2,
+							"revision" : 3,
 							"architecture" : "x86",
 							"modernui" : 1
 						}
@@ -6096,7 +6138,7 @@
 										"appversion" : 										{
 											"major" : 7,
 											"minor" : 0,
-											"revision" : 2,
+											"revision" : 3,
 											"architecture" : "x86",
 											"modernui" : 1
 										}
@@ -6591,7 +6633,7 @@
 						"appversion" : 						{
 							"major" : 7,
 							"minor" : 0,
-							"revision" : 2,
+							"revision" : 3,
 							"architecture" : "x86",
 							"modernui" : 1
 						}
@@ -6647,7 +6689,7 @@
 										"appversion" : 										{
 											"major" : 7,
 											"minor" : 0,
-											"revision" : 2,
+											"revision" : 3,
 											"architecture" : "x86",
 											"modernui" : 1
 										}
@@ -6769,7 +6811,7 @@
 														"appversion" : 														{
 															"major" : 7,
 															"minor" : 0,
-															"revision" : 2,
+															"revision" : 3,
 															"architecture" : "x86",
 															"modernui" : 1
 														}
@@ -7416,7 +7458,7 @@
 														"appversion" : 														{
 															"major" : 7,
 															"minor" : 0,
-															"revision" : 2,
+															"revision" : 3,
 															"architecture" : "x86",
 															"modernui" : 1
 														}
@@ -7947,7 +7989,7 @@
 										"appversion" : 										{
 											"major" : 7,
 											"minor" : 0,
-											"revision" : 2,
+											"revision" : 3,
 											"architecture" : "x86",
 											"modernui" : 1
 										}
@@ -8137,7 +8179,7 @@
 										"appversion" : 										{
 											"major" : 7,
 											"minor" : 0,
-											"revision" : 2,
+											"revision" : 3,
 											"architecture" : "x86",
 											"modernui" : 1
 										}
@@ -8268,7 +8310,7 @@
 										"appversion" : 										{
 											"major" : 7,
 											"minor" : 0,
-											"revision" : 2,
+											"revision" : 3,
 											"architecture" : "x86",
 											"modernui" : 1
 										}
@@ -8302,15 +8344,28 @@
 										"subpatcher_template" : "",
 										"boxes" : [ 											{
 												"box" : 												{
+													"id" : "obj-5",
+													"linecount" : 2,
+													"maxclass" : "comment",
+													"numinlets" : 1,
+													"numoutlets" : 0,
+													"patching_rect" : [ 193.0, 78.0, 359.0, 33.0 ],
+													"style" : "",
+													"text" : "Note that lights have to be registered to the window's context, not the jit.gl.node, currently."
+												}
+
+											}
+, 											{
+												"box" : 												{
 													"id" : "obj-2",
 													"linecount" : 2,
 													"maxclass" : "newobj",
 													"numinlets" : 1,
 													"numoutlets" : 1,
 													"outlettype" : [ "" ],
-													"patching_rect" : [ 193.0, 42.0, 383.0, 35.0 ],
+													"patching_rect" : [ 193.0, 42.0, 389.0, 35.0 ],
 													"style" : "",
-													"text" : "jit.gl.light world @type directional @direction -1 -0.4 1 @ambient 0.27 0.22 0.18"
+													"text" : "jit.gl.light oculus @type directional @direction -1 -0.4 1 @ambient 0.27 0.22 0.18"
 												}
 
 											}
@@ -8438,7 +8493,7 @@
 										"appversion" : 										{
 											"major" : 7,
 											"minor" : 0,
-											"revision" : 2,
+											"revision" : 3,
 											"architecture" : "x86",
 											"modernui" : 1
 										}
@@ -8521,7 +8576,7 @@
 														"appversion" : 														{
 															"major" : 7,
 															"minor" : 0,
-															"revision" : 2,
+															"revision" : 3,
 															"architecture" : "x86",
 															"modernui" : 1
 														}
@@ -9250,7 +9305,7 @@
 						"appversion" : 						{
 							"major" : 7,
 							"minor" : 0,
-							"revision" : 2,
+							"revision" : 3,
 							"architecture" : "x86",
 							"modernui" : 1
 						}
@@ -10607,26 +10662,9 @@
 					"numinlets" : 1,
 					"numoutlets" : 2,
 					"outlettype" : [ "bang", "" ],
-					"patching_rect" : [ 18.0, 437.0, 190.5, 33.0 ],
+					"patching_rect" : [ 18.0, 437.0, 191.0, 33.0 ],
 					"style" : "",
-					"text" : "jit.window oculus @size 480 270 @fsmenubar 0 @shared 1"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"attr" : "sync",
-					"fontname" : "Verdana",
-					"fontsize" : 10.0,
-					"id" : "obj-23",
-					"lock" : 1,
-					"maxclass" : "attrui",
-					"numinlets" : 1,
-					"numoutlets" : 1,
-					"outlettype" : [ "" ],
-					"patching_rect" : [ 60.0, 405.0, 78.0, 21.0 ],
-					"style" : "",
-					"text_width" : 50.0
+					"text" : "jit.window oculus @size 480 270 @fsmenubar 0 @sync 1 @shared 1"
 				}
 
 			}
@@ -10804,15 +10842,6 @@
 			}
 , 			{
 				"patchline" : 				{
-					"destination" : [ "obj-8", 0 ],
-					"disabled" : 0,
-					"hidden" : 0,
-					"source" : [ "obj-23", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
 					"destination" : [ "obj-36", 0 ],
 					"disabled" : 0,
 					"hidden" : 0,
@@ -10950,8 +10979,8 @@
 			}
  ],
 		"dependency_cache" : [ 			{
-				"name" : "oculus.mxe",
-				"type" : "iLaF"
+				"name" : "oculus.mxo",
+				"type" : "iLaX"
 			}
  ],
 		"embedsnapshot" : 0
