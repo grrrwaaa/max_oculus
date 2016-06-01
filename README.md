@@ -1,6 +1,8 @@
 oculus
 ======
 
+**This repository is frozen on the Oculus 0.4.4 SDK/driver, for the developer kit. For using newer drivers and the current consumer Oculus (as well as the HTC Vive), take a look at the [Max Worldmaking Package](https://github.com/worldmaking/Max_Worldmaking_Package).**
+
 A Max/MSP/Jitter object to provide access to the Oculus Rift HMD via the LibOVR SDK. 
 
 For development history & feedback, also [see discussion on the C74 forum](http://www.cycling74.com/forums/topic/oculus-rift).
